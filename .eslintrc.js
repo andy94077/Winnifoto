@@ -20,5 +20,6 @@ module.exports = {
     "react/no-danger": 0,
     "no-nested-ternary": 0,
     "no-bitwise": 0,
+    "no-unused-vars": "warn",
   },
 };

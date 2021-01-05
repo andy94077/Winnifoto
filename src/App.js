@@ -1,6 +1,17 @@
 import React from "react";
-import "./App.css";
+import { makeStyles } from "@material-ui/core/styles";
+import Profile from "./Profile/Profile";
+
+const useStyles = makeStyles({
+  root: { display: "flex", justifyContent: "center" },
+});
 
 export default function App() {
-  return <div className="App">hello</div>;
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <Profile />
+    </div>
+  );
 }

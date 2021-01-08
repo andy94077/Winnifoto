@@ -86,7 +86,7 @@ export default function Profile() {
   return (
     <div className={classes.root}>
       <div className={classes.header}>
-        <Avatar alt={user.name} src="/imgs/r.jpg" className={classes.avatar} />
+        <Avatar alt={user.name} src={user.img} className={classes.avatar} />
         <div style={{ marginTop: 10 }}>
           <Typography variant="h2" gutterBottom style={{ fontSize: 40 }}>
             {user.name}

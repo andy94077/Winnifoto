@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { GridList } from "@material-ui/core";
-import { useTheme } from "@material-ui/core/styles";
+import { useTheme, makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import PostPreview from "./PostPreview";
 import CustomModal from "./CustomModal";
 import Post from "./Post";
 
+const useStyles = makeStyles({
+  card: {
+    top: "40%",
+    transform: "translateY(-40%)",
+  },
+});
+
 export default function PostGrid(props) {
   const { posts, cols = 3 } = props;
+  const classes = useStyles();
   const theme = useTheme();
   const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
   const [openModal, setOpenModal] = useState(false);
@@ -42,7 +50,7 @@ export default function PostGrid(props) {
         ))}
       </GridList>
       <CustomModal open={openModal} setOpen={setOpenModal}>
-        <Post post={modalContent} />
+        <Post post={modalContent} classes={{ card: classes.card }} />
       </CustomModal>
     </>
   );

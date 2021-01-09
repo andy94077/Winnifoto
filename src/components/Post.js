@@ -4,11 +4,13 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Chip,
   IconButton,
   Typography,
   Avatar,
   CardHeader,
 } from "@material-ui/core";
+import { AccessTime, Place } from "@material-ui/icons";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,12 +33,13 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     borderRadius: 10,
   },
+  header: { paddingBottom: 4 },
   details: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
   },
-  content: { flex: "1 0 auto" },
+  content: { flex: "1 0 auto", paddingTop: 10 },
   cover: { flex: 1 },
   controls: {
     display: "flex",
@@ -44,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(1),
   },
+  tag: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  chip: { margin: "5px 3px 0 0", height: 30 },
 }));
 
 export default function Post(props) {
@@ -56,6 +65,7 @@ export default function Post(props) {
         <CardMedia className={classes.cover} image={post.img} />
         <div className={classes.details}>
           <CardHeader
+            className={classes.header}
             avatar={<Avatar alt={post.user.name} src={post.user.img} />}
             title={post.user.name}
             subheader={
@@ -64,6 +74,30 @@ export default function Post(props) {
                 : post.createAt.fromNow()
             }
           />
+          <div style={{ margin: "10px 0 0 13px" }}>
+            {Object.prototype.hasOwnProperty.call(post, "time") && (
+              <div className={classes.tag}>
+                <AccessTime color="primary" style={{ marginRight: "0.5em" }} />
+                {post.time.format("MM/DD/YYYY, h:mm a")}
+              </div>
+            )}
+            {Object.prototype.hasOwnProperty.call(post, "location") && (
+              <div className={classes.tag}>
+                <Place color="primary" style={{ marginRight: "0.5em" }} />
+                {post.location}
+              </div>
+            )}
+            {Object.prototype.hasOwnProperty.call(post, "styles") &&
+              post.styles.map((style) => (
+                <Chip
+                  className={classes.chip}
+                  key={style}
+                  label={style}
+                  color="primary"
+                  variant="outlined"
+                />
+              ))}
+          </div>
           <CardContent className={classes.content}>
             <Typography variant="subtitle1" color="textSecondary">
               {post.body}

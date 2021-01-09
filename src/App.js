@@ -27,6 +27,9 @@ export default function App() {
       <Post
         post={{
           img: "/imgs/w.jpg",
+          time: moment().add(3, "days"),
+          location: "Taipei",
+          styles: ["style1", "style2"],
           likesNum: 3,
           commentsNum: 10,
           body: "This is the body.",

@@ -6,14 +6,23 @@ import { FavoriteRounded, ChatBubbleRounded } from "@material-ui/icons";
 const useStyles = makeStyles({
   root: {
     position: "relative",
-    width: 250,
-    height: 250,
+    width: "100%",
+    height: 0,
+    paddingTop: "100%",
+    overflow: "hidden",
     "&:hover div": { visibility: "visible" },
   },
+  tile: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+  },
   hover: {
+    position: "absolute",
     left: 0,
     top: 0,
-    position: "absolute",
     display: "flex",
     visibility: "hidden",
     alignItems: "center",
@@ -34,14 +43,15 @@ const useStyles = makeStyles({
 });
 
 export default function PostPreview(props) {
-  const { post, style = {}, className = "" } = props;
+  const { post, onClick, style = {}, className = "" } = props;
   const classes = useStyles();
 
   return (
     <GridListTile
       key={post.img}
-      className={`${classes.root} ${className}`}
+      classes={{ root: `${classes.root} ${className}`, tile: classes.tile }}
       style={{ ...style }}
+      onClick={onClick}
     >
       <img src={post.img} alt={post.title} />
       <div className={classes.hover}>

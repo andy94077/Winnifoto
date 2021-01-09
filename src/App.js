@@ -24,8 +24,9 @@ export default function App() {
   return (
     <div className={classes.root}>
       <Bar />
-      <Post
+      {/* <Post
         post={{
+          id: 123,
           img: "/imgs/w.jpg",
           time: moment().add(3, "days"),
           location: "Taipei",
@@ -36,8 +37,8 @@ export default function App() {
           user,
           createAt: moment().subtract(3, "days"),
         }}
-      />
-      {/* <Profile /> */}
+      /> */}
+      <Profile />
     </div>
   );
 }

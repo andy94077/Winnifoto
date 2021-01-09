@@ -50,12 +50,11 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "rgba(60, 75, 130, 0.04)",
     },
-    marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2),
-    width: "100%",
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    width: "auto",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: "auto",
     },
   },
   searchIcon: {

@@ -56,16 +56,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Post(props) {
-  const { post } = props;
-  const classes = useStyles();
+  const { post, className = "", classes = { root: "", card: "" } } = props;
+  const postClasses = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-        <CardMedia className={classes.cover} image={post.img} />
-        <div className={classes.details}>
+    <div className={`${postClasses.root} ${className} ${classes.root}`}>
+      <Card className={`${postClasses.card} ${classes.card}`}>
+        <CardMedia className={postClasses.cover} image={post.img} />
+        <div className={postClasses.details}>
           <CardHeader
-            className={classes.header}
+            className={postClasses.header}
             avatar={<Avatar alt={post.user.name} src={post.user.img} />}
             title={post.user.name}
             subheader={
@@ -76,13 +76,13 @@ export default function Post(props) {
           />
           <div style={{ margin: "10px 0 0 13px" }}>
             {Object.prototype.hasOwnProperty.call(post, "time") && (
-              <div className={classes.tag}>
+              <div className={postClasses.tag}>
                 <AccessTime color="primary" style={{ marginRight: "0.5em" }} />
                 {post.time.format("MM/DD/YYYY, h:mm a")}
               </div>
             )}
             {Object.prototype.hasOwnProperty.call(post, "location") && (
-              <div className={classes.tag}>
+              <div className={postClasses.tag}>
                 <Place color="primary" style={{ marginRight: "0.5em" }} />
                 {post.location}
               </div>
@@ -90,7 +90,7 @@ export default function Post(props) {
             {Object.prototype.hasOwnProperty.call(post, "styles") &&
               post.styles.map((style) => (
                 <Chip
-                  className={classes.chip}
+                  className={postClasses.chip}
                   key={style}
                   label={style}
                   color="primary"
@@ -98,7 +98,7 @@ export default function Post(props) {
                 />
               ))}
           </div>
-          <CardContent className={classes.content}>
+          <CardContent className={postClasses.content}>
             <Typography variant="subtitle1" color="textSecondary">
               {post.body}
             </Typography>

@@ -9,6 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js"
+    "seed": "nodemon src/seed/seeder.js",
+    "server": "nodemon src/server.js"
   }
 }

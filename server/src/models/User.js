@@ -18,10 +18,12 @@ const UserSchema = new Schema({
   },
   token: String,
   postNum: { type: Number, default: 0 },
-  avatarUrl: String,
+  avatarUrl: { type: String, default: "/avatars/defaultAvatar.jpg" },
 });
 
-UserSchema.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator, {
+  message: "The username has been registered.",
+});
 
 UserSchema.methods.generateJWT = () =>
   jsonwebtoken.sign(

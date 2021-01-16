@@ -4,12 +4,32 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv-defaults": "^2.0.1",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.11.12",
+    "mongoose-unique-validator": "^2.0.3",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.7"
   },
-  "type": "module",
   "scripts": {
-    "seed": "node src/seed/seeder.js",
-    "server": "nodemon src/server.js"
+    "routes": "run-script-os",
+    "routes:win32": "set SHOW_ROUTES=true && nodemon src/server.js --exec babel-node --trace-warnings",
+    "routes:default": "SHOW_ROUTES=true nodemon src/server.js --exec babel-node --trace-warnings",
+    "seed": "node src/seed/seeder.js --exec babel-node",
+    "server": "nodemon src/server.js --exec babel-node"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "express-list-endpoints": "^5.0.0",
+    "run-script-os": "^1.1.4"
   }
 }

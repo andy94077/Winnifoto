@@ -21,5 +21,7 @@ module.exports = {
     "no-nested-ternary": 0,
     "no-bitwise": 0,
     "no-unused-vars": "warn",
+    "no-underscore-dangle": 0,
+    "no-restricted-syntax": 0,
   },
 };

@@ -31,14 +31,14 @@ const UserController = {
     }
   },
   login: async (req, res) => {
-    const users = await User.find({ name: req.query.username });
-    console.log(users);
-    if (users.length == 1) {
-      if (!bcrypt.compareSync(req.query.password, users[0].password))
-        return res.status(403).json({ msg: 'Incorrect password.' });
-      return res.json(users);
+    const user = await User.find({ name: req.query.username });
+    console.log(user);
+    if (user.length == 1) {
+      if (!bcrypt.compareSync(req.query.password, user[0].password))
+        return res.status(403).json({ msg: "Incorrect password." });
+      return res.json(user[0]);
     }
-    return res.status(403).json({ msg: 'Username not found.'});
+    return res.status(403).json({ msg: "Username not found." });
   },
 };
 

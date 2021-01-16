@@ -30,7 +30,16 @@ const UserController = {
       return res.status(403).json({ msg: err.errors.name.message });
     }
   },
-  login: async (req, res) => {},
+  login: async (req, res) => {
+    const users = await User.find({ name: req.query.username });
+    console.log(users);
+    if (users.length == 1) {
+      if (!bcrypt.compareSync(req.query.password, users[0].password))
+        return res.status(403).json({ msg: 'Incorrect password.' });
+      return res.json(users);
+    }
+    return res.status(403).json({ msg: 'Username not found.'});
+  },
 };
 
 export default UserController;

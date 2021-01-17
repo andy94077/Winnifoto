@@ -21,22 +21,31 @@ const UserController = {
         .json({ msg: "password should have length between 4 ~ 32" });
     }
     try {
-      const msg = await User.create({
+      const user = await User.create({
         name: username,
         password: bcrypt.hashSync(password, 10),
       });
-      return res.json({ msg });
+      return res.json({
+        id: user._id,
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+        postNum: user.postNum,
+      });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
     }
   },
   login: async (req, res) => {
     const user = await User.find({ name: req.query.username });
-    console.log(user);
-    if (user.length == 1) {
+    if (user.length === 1) {
       if (!bcrypt.compareSync(req.query.password, user[0].password))
         return res.status(403).json({ msg: "Incorrect password." });
-      return res.json(user[0]);
+      return res.json({
+        id: user[0]._id,
+        name: user[0].name,
+        avatarUrl: user[0].avatarUrl,
+        postNum: user[0].postNum,
+      });
     }
     return res.status(403).json({ msg: "Username not found." });
   },

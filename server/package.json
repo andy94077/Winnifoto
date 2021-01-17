@@ -12,6 +12,7 @@
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
+    "mmmagic": "^0.5.3",
     "mongoose": "^5.11.12",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",

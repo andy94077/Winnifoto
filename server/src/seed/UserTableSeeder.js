@@ -9,17 +9,17 @@ const UserTableSeeder = {
       {
         name: "andy",
         password: bcrypt.hashSync("andy", 10),
-        avatarUri: "/avatars/cat.jpg",
+        avatarUri: "public/avatars/cat.jpg",
       },
       {
         name: "chiachia",
         password: bcrypt.hashSync("chiachia", 10),
-        avatarUri: "/avatars/dog.jpg",
+        avatarUri: "public/avatars/dog.jpg",
       },
       {
         name: "benson",
         password: bcrypt.hashSync("benson", 10),
-        avatarUri: "/avatars/dog2.jpg",
+        avatarUri: "public/avatars/dog2.jpg",
       },
     ];
     await User.create(users);

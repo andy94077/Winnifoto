@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import fs from "fs";
+import { Magic } from "mmmagic";
 import User from "../models/User";
 
 const UserController = {
@@ -8,8 +10,9 @@ const UserController = {
     return res.json({ users });
   },
   create: async (req, res) => {
-    const username = req.query.username || "";
-    const password = req.query.password || "";
+    console.log(req.body);
+    const username = req.body.username || "";
+    const password = req.body.password || "";
     if (username.length < 4 || username.length > 16) {
       return res
         .status(403)
@@ -36,9 +39,9 @@ const UserController = {
     }
   },
   login: async (req, res) => {
-    const user = await User.find({ name: req.query.username });
+    const user = await User.find({ name: req.body.username });
     if (user.length === 1) {
-      if (!bcrypt.compareSync(req.query.password, user[0].password))
+      if (!bcrypt.compareSync(req.body.password, user[0].password))
         return res.status(403).json({ msg: "Incorrect password." });
       return res.json({
         id: user[0]._id,
@@ -48,6 +51,17 @@ const UserController = {
       });
     }
     return res.status(403).json({ msg: "Username not found." });
+  },
+  updateAvatar: async (req, res) => {
+    const img = req.body.avatar;
+
+    fs.writeFile("public/avatars/tmpOAO.png", img, "binary", (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(403).json({ msg: "Upload image error" });
+      }
+      return res.json({ msg: "success" });
+    });
   },
 };
 

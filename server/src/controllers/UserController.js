@@ -42,7 +42,12 @@ const UserController = {
     const user = await User.find({ name: req.body.username });
     if (user.length === 1) {
       if (!bcrypt.compareSync(req.body.password, user[0].password))
-        return res.status(403).json({ msg: "Incorrect password." });
+        return res.status(403).json({
+          msg: {
+            username: "Username exist.",
+            password: "Incorrect password.",
+          },
+        });
       return res.json({
         id: user[0]._id,
         name: user[0].name,
@@ -51,7 +56,7 @@ const UserController = {
         token: user[0].token,
       });
     }
-    return res.status(403).json({ msg: "Username not found." });
+    return res.status(403).json({ msg: { username: "Username not found." } });
   },
   updateAvatar: async (req, res) => {
     const img = req.body.avatar;

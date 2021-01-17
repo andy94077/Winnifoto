@@ -40,7 +40,7 @@ const PostController = {
       return res.json({ msg });
     } catch (err) {
       console.log(err);
-      return res.status(403).json({ msg: err.errors["type"].message });
+      return res.status(403).json({ msg: err.errors.type.message });
     }
   },
   update: async (req, res) => {
@@ -56,7 +56,7 @@ const PostController = {
     }
     const filter = { _id: data.postID };
     try {
-      const msg = await Post.findOneAndUpdate(filter, data, { new: true });
+      const msg = await Post.updateOne(filter, data);
       return res.json({ msg });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
@@ -94,8 +94,9 @@ const PostController = {
     }
     const filter = { _id: data.postID };
     try {
-      const update = [...(await Post.findOne(filter).likes), data.userID];
-      await Post.findOneAndUpdate(filter, update, { new: true });
+      const msg = await Post.updateOne(filter, {
+        $push: { likes: data.userID },
+      });
       return res.json({ msg: "Success" });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
@@ -120,11 +121,9 @@ const PostController = {
     }
     const filter = { _id: data.postID };
     try {
-      const update = [
-        ...(await Post.findOne(filter).comments),
-        { name: data.username, content: data.comment },
-      ];
-      await Post.findOneAndUpdate(filter, update, { new: true });
+      const msg = await Post.updateOne(filter, {
+        $push: { comments: { name: data.username, content: data.comment } },
+      });
       return res.json({ msg: "Success" });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });

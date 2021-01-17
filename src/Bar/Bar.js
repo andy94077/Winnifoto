@@ -1,26 +1,29 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   AppBar,
   Toolbar,
   IconButton,
+  Button,
   Typography,
   InputBase,
   Badge,
   MenuItem,
   Menu,
+  useMediaQuery,
 } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
+import {
+  FaceRounded,
+  MoreVertRounded,
+  NotificationsRounded,
+  SearchRounded,
+  MailRounded,
+  AccountCircleRounded,
+  PhotoCameraRounded,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
-    width: "100%",
-  },
+  grow: { flexGrow: 1, width: "100%" },
   appBar: {
     backgroundColor: "#fafafa",
     color: "#333",
@@ -30,19 +33,22 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     display: "flex",
-    maxWidth: 1000,
+    maxWidth: 1200,
     width: "100%",
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  menuButton: { marginRight: theme.spacing(2) },
+  block: {
+    [theme.breakpoints.up("sm")]: {
+      flex: 1,
+    },
   },
+  leftBlock: { display: "flex", alignItems: "center" },
+  middleBlock: { maxWidth: 250 },
   title: {
-    display: "block",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
-    marginRight: "auto",
+    display: "inline",
+    marginRight: theme.spacing(1),
   },
+  tabButton: { textTransform: "none", whiteSpace: "nowrap" },
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -53,11 +59,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     marginLeft: theme.spacing(1),
     width: "auto",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-    },
   },
-  searchIcon: {
+  SearchRounded: {
     padding: theme.spacing(0, 2),
     height: "100%",
     position: "absolute",
@@ -66,40 +69,40 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  inputRoot: {
-    color: "inherit",
-  },
+  inputRoot: { color: "inherit" },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
+    // vertical padding + font size from SearchRounded
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
+    [theme.breakpoints.up("md")]: { width: "20ch" },
   },
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
       display: "flex",
+      justifyContent: "flex-end",
     },
-    marginLeft: "auto",
   },
   sectionMobile: {
     display: "flex",
+    justifyContent: "flex-end",
+    marginLeft: "auto",
     [theme.breakpoints.up("md")]: {
       display: "none",
     },
-    marginLeft: "auto",
   },
   offset: theme.mixins.toolbar,
 }));
 
 export default function Bar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const theme = useTheme();
+  const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
+  // const widthMatches = useMediaQuery("(min-width:1004px)");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -151,7 +154,7 @@ export default function Bar() {
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
-            <MailIcon />
+            <MailRounded />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -159,7 +162,7 @@ export default function Bar() {
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
+            <NotificationsRounded />
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -171,7 +174,7 @@ export default function Bar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircleRounded />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -182,31 +185,63 @@ export default function Bar() {
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography className={classes.title} variant="h6">
-            Winnifoto
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
+          <div className={`${classes.block} ${classes.leftBlock}`}>
+            <Typography className={classes.title} variant="h6">
+              Winnifoto
+            </Typography>
+
+            {widthMatches ? (
+              <>
+                <Button
+                  className={classes.tabButton}
+                  color="inherit"
+                  startIcon={<FaceRounded />}
+                >
+                  Find Model
+                </Button>
+                <Button
+                  className={classes.tabButton}
+                  color="inherit"
+                  startIcon={<PhotoCameraRounded />}
+                >
+                  Find Snapper
+                </Button>
+              </>
+            ) : (
+              <>
+                <IconButton color="inherit">
+                  <FaceRounded />
+                </IconButton>
+                <IconButton color="inherit">
+                  <PhotoCameraRounded />
+                </IconButton>
+              </>
+            )}
           </div>
-          <div className={classes.sectionDesktop}>
+          <div className={`${classes.block} ${classes.middleBlock}`}>
+            <div className={classes.search}>
+              <div className={classes.SearchRounded}>
+                <SearchRounded />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </div>
+          </div>
+          <div className={`${classes.block} ${classes.sectionDesktop}`}>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">
-                <MailIcon />
+                <MailRounded />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
+                <NotificationsRounded />
               </Badge>
             </IconButton>
             <IconButton
@@ -217,10 +252,10 @@ export default function Bar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircleRounded />
             </IconButton>
           </div>
-          <div className={classes.sectionMobile}>
+          <div className={`${classes.block} ${classes.sectionMobile}`}>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -228,7 +263,7 @@ export default function Bar() {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <MoreVertRounded />
             </IconButton>
           </div>
         </Toolbar>

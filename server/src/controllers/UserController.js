@@ -28,7 +28,7 @@ const UserController = {
       return res.json({
         id: user._id,
         name: user.name,
-        avatarUrl: user.avatarUrl,
+        avatarUri: user.avatarUri,
         postNum: user.postNum,
       });
     } catch (err) {
@@ -43,7 +43,7 @@ const UserController = {
       return res.json({
         id: user[0]._id,
         name: user[0].name,
-        avatarUrl: user[0].avatarUrl,
+        avatarUri: user[0].avatarUri,
         postNum: user[0].postNum,
       });
     }

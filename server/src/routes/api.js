@@ -4,6 +4,7 @@ import PostController from "../controllers/PostController";
 
 const router = Router();
 router.route("/user").get(UserController.index).post(UserController.create);
+router.route("/login").post(UserController.login);
 
 router
   .route("/post")

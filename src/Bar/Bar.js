@@ -21,6 +21,7 @@ import {
   AccountCircleRounded,
   PhotoCameraRounded,
 } from "@material-ui/icons";
+import { Link, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   grow: { flexGrow: 1, width: "100%" },
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline",
     marginRight: theme.spacing(1),
   },
+  link: { textDecoration: "none", height: "100%" },
   tabButton: {
     textTransform: "none",
     whiteSpace: "nowrap",
@@ -107,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Bar(props) {
   const { channel, setChannel } = props;
+  const location = useLocation();
   const classes = useStyles();
   const theme = useTheme();
   const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
@@ -203,37 +206,56 @@ export default function Bar(props) {
 
             {widthMatches ? (
               <>
-                <Button
-                  className={classes.tabButton}
-                  color={channel === "findModel" ? "primary" : "default"}
-                  startIcon={<FaceRounded />}
-                  onClick={handleTabChange("findModel")}
-                >
-                  Find Model
-                </Button>
-                <Button
-                  className={classes.tabButton}
-                  color={channel === "findSnapper" ? "primary" : "default"}
-                  startIcon={<PhotoCameraRounded />}
-                  onClick={handleTabChange("findSnapper")}
-                >
-                  Find Snapper
-                </Button>
+                <Link to="/" className={classes.link}>
+                  <Button
+                    className={classes.tabButton}
+                    color={
+                      channel === "findModel" && location.pathname === "/"
+                        ? "primary"
+                        : "default"
+                    }
+                    startIcon={<FaceRounded />}
+                    onClick={handleTabChange("findModel")}
+                  >
+                    Find Model
+                  </Button>
+                </Link>
+                <Link to="/" className={classes.link}>
+                  <Button
+                    className={classes.tabButton}
+                    color={
+                      channel === "findSnapper" && location.pathname === "/"
+                        ? "primary"
+                        : "default"
+                    }
+                    startIcon={<PhotoCameraRounded />}
+                    onClick={handleTabChange("findSnapper")}
+                    href="/"
+                  >
+                    Find Snapper
+                  </Button>
+                </Link>
               </>
             ) : (
               <>
-                <IconButton
-                  color={channel === "findModel" ? "primary" : "default"}
-                  onClick={handleTabChange("findModel")}
-                >
-                  <FaceRounded />
-                </IconButton>
-                <IconButton
-                  color={channel === "findSnapper" ? "primary" : "default"}
-                  onClick={handleTabChange("findSnapper")}
-                >
-                  <PhotoCameraRounded />
-                </IconButton>
+                <Link to="/" className={classes.link}>
+                  <IconButton
+                    className={classes.tabButton}
+                    color={channel === "findModel" ? "primary" : "default"}
+                    onClick={handleTabChange("findModel")}
+                  >
+                    <FaceRounded />
+                  </IconButton>
+                </Link>
+                <Link to="/" className={classes.link}>
+                  <IconButton
+                    className={classes.tabButton}
+                    color={channel === "findSnapper" ? "primary" : "default"}
+                    onClick={handleTabChange("findSnapper")}
+                  >
+                    <PhotoCameraRounded />
+                  </IconButton>
+                </Link>
               </>
             )}
           </div>

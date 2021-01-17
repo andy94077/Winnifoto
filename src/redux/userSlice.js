@@ -5,7 +5,7 @@ export const userSlice = createSlice({
   initialState: {
     id: 0,
     name: "Yueh",
-    img: "/images/y.jpg",
+    avatarUri: "/images/y.jpg",
   },
   reducers: {
     setUser: (state, action) => {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
+import { Switch, Route, useLocation } from "react-router-dom";
+
 import { useSelector } from "react-redux";
 import Profile from "./Profile/Profile";
 import Bar from "./Bar/Bar";
@@ -19,6 +20,8 @@ const useStyles = makeStyles({
 });
 
 export default function App() {
+  const location = useLocation();
+
   const [channel, setChannel] = useState("findModel");
   const user = useSelector(selectUser);
   const classes = useStyles();
@@ -26,8 +29,20 @@ export default function App() {
   return (
     <div className={classes.root}>
       <Bar channel={channel} setChannel={setChannel} />
-      <HomePage channel={channel} />
-      {/* <Profile /> */}
+      <Switch>
+        <Route exact path="/">
+          <HomePage channel={channel} />
+        </Route>
+        <Route exact path="/home/:searchKey">
+          <HomePage channel={channel} />
+        </Route>
+        <Route exact path="/post/:postId">
+          <Post />
+        </Route>
+        <Route exact path="/profile/:userId">
+          <Profile />
+        </Route>
+      </Switch>
     </div>
   );
 }

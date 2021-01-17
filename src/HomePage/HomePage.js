@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 
 import { selectUser } from "../redux/userSlice";
 import Post from "../components/Post";
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HomePage(props) {
   const { channel } = props;
+  const { searchKey } = useParams();
   const user = useSelector(selectUser);
   const classes = useStyles();
 

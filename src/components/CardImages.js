@@ -7,7 +7,7 @@ import {
 } from "@material-ui/icons";
 import clsx from "clsx";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     position: "relative",
     flex: 1,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& svg": { fontSize: "1.1em" },
   },
-}));
+});
 
 export default function CardImages(props) {
   const { images, className = "" } = props;

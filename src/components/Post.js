@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { AccessTime, Place } from "@material-ui/icons";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 import CardImages from "./CardImages";
 
@@ -66,8 +67,19 @@ export default function Post(props) {
         <div className={postClasses.details}>
           <CardHeader
             className={postClasses.header}
-            avatar={<Avatar alt={post.user.name} src={post.user.img} />}
-            title={post.user.name}
+            avatar={
+              <Link to={`/profile/${post.user.id}`}>
+                <Avatar alt={post.user.name} src={post.user.avatarUri} />
+              </Link>
+            }
+            title={
+              <Link
+                to={`/profile/${post.user.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                {post.user.name}
+              </Link>
+            }
             subheader={
               post.createAt - moment().subtract(5, "days")
                 ? post.createAt.calendar()

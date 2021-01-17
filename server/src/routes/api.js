@@ -4,13 +4,14 @@ import PostController from "../controllers/PostController";
 
 const router = Router();
 router.route("/user").get(UserController.index).post(UserController.create);
+
 router
   .route("/post")
   .get(PostController.index)
   .post(PostController.create)
   .put(PostController.update)
-  .delete(PostController.delete)
-  .put(PostController.like)
-  .put(PostController.comment);
+  .delete(PostController.delete);
+router.route("/post/like").put(PostController.like);
+router.route("/post/comment").put(PostController.comment);
 
 export default router;

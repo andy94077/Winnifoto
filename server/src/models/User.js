@@ -21,7 +21,7 @@ const UserSchema = new Schema({
     required: [true, "token field is required."],
   },
   postNum: { type: Number, default: 0 },
-  avatarUri: { type: String, default: "/avatars/defaultAvatar.jpg" },
+  avatarUri: { type: String, default: "avatars/defaultAvatar.jpg" },
 });
 
 UserSchema.plugin(uniqueValidator, {

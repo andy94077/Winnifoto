@@ -9,7 +9,7 @@ const PostParser = (req) => {
   data.type = req.body.type;
   if (req.body.content) data.content = req.body.content;
   if (req.body.time) data.time = new Date(req.body.time);
-  if (req.body.location) data.localtion = req.body.location;
+  if (req.body.location) data.location = req.body.location;
   if (req.body.styles) data.styles = req.body.styles;
   if (req.body.images) data.images = req.body.images;
   if (req.body.username) data.username = req.body.username;

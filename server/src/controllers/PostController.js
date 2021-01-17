@@ -25,20 +25,22 @@ const PostController = {
   },
   create: async (req, res) => {
     const data = PostParser(req);
-    if (!data.userID) {
+    if (!data.userID)
       return res.status(403).json({ msg: "userID field is required" });
-    }
-    if (!data.token) {
+    if (!data.token)
       return res.status(403).json({ msg: "token field is required" });
-    }
-    if (!data.type) {
+    if (!data.type)
       return res.status(403).json({ msg: "type field is required" });
-    }
+    if (!data.images && !data.content)
+      return res
+        .status(403)
+        .json({ msg: "Need images field or content field" });
     try {
       const msg = await Post.create(data);
       return res.json({ msg });
     } catch (err) {
-      return res.status(403).json({ msg: err.errors.name.message });
+      console.log(err);
+      return res.status(403).json({ msg: err.errors["type"].message });
     }
   },
   update: async (req, res) => {

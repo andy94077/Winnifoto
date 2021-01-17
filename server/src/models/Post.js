@@ -23,7 +23,13 @@ const PostSchema = new Schema(
     type: {
       type: String,
       required: [true, "type field is required."],
-      enum: ["normal", "findModel", "findSnapper"],
+      validate: {
+        validator: function (v) {
+          return ["normal", "findModel", "findSnapper"].includes(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid type! Should be one of normal, findModel, or findSnapper.`,
+      },
     },
     content: {
       type: String,

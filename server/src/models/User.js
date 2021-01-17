@@ -16,7 +16,10 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Password field is required."],
   },
-  token: String,
+  token: {
+    type: String,
+    required: [true, "token field is required."],
+  },
   postNum: { type: Number, default: 0 },
   avatarUri: { type: String, default: "/avatars/defaultAvatar.jpg" },
 });

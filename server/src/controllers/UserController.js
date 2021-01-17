@@ -48,6 +48,7 @@ const UserController = {
         name: user[0].name,
         avatarUri: user[0].avatarUri,
         postNum: user[0].postNum,
+        token: user[0].token,
       });
     }
     return res.status(403).json({ msg: "Username not found." });

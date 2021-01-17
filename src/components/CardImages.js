@@ -47,8 +47,7 @@ export default function CardImages(props) {
     <div className={classes.root}>
       {images.map((image, i) => (
         <CardMedia
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={image}
           className={clsx(classes.cover, {
             [classes.active]: i === imgIndex,
             [className]: className !== "" && className !== undefined,

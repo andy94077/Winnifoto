@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   },
   token: String,
   postNum: { type: Number, default: 0 },
-  avatarUrl: { type: String, default: "/avatars/defaultAvatar.jpg" },
+  avatarUri: { type: String, default: "/avatars/defaultAvatar.jpg" },
 });
 
 UserSchema.plugin(uniqueValidator, {

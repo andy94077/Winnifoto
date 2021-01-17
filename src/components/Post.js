@@ -3,15 +3,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
   CardContent,
-  CardMedia,
   Chip,
-  IconButton,
   Typography,
   Avatar,
   CardHeader,
 } from "@material-ui/core";
 import { AccessTime, Place } from "@material-ui/icons";
 import moment from "moment";
+
+import CardImages from "./CardImages";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,7 +62,7 @@ export default function Post(props) {
   return (
     <div className={`${postClasses.root} ${className} ${classes.root}`}>
       <Card className={`${postClasses.card} ${classes.card}`}>
-        <CardMedia className={postClasses.cover} image={post.img} />
+        <CardImages images={post.images} />
         <div className={postClasses.details}>
           <CardHeader
             className={postClasses.header}

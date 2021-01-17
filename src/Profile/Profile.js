@@ -61,7 +61,8 @@ export default function Profile() {
   const posts = [
     {
       id: 123,
-      img: "/imgs/w.jpg",
+      images: ["/images/w.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -73,7 +74,8 @@ export default function Profile() {
     },
     {
       id: 789,
-      img: "/imgs/i.jpg",
+      images: ["/images/i.jpg", "/images/i-2.jpg", "/images/i2.jpg"],
+      type: "normal",
       time: moment().add(1, "days").subtract(40, "minutes"),
       location: "Tainan",
       styles: ["style1", "style2"],
@@ -85,7 +87,8 @@ export default function Profile() {
     },
     {
       id: 0,
-      img: "/imgs/n.jpg",
+      images: ["/images/n.jpg"],
+      type: "normal",
       time: moment().add(2, "days"),
       location: "Penghu",
       styles: ["style1", "style2"],
@@ -97,7 +100,8 @@ export default function Profile() {
     },
     {
       id: 1,
-      img: "/imgs/n2.jpg",
+      images: ["/images/n2.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -109,7 +113,8 @@ export default function Profile() {
     },
     {
       id: 2,
-      img: "/imgs/i2.jpg",
+      images: ["/images/i2.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -121,7 +126,8 @@ export default function Profile() {
     },
     {
       id: 3,
-      img: "/imgs/f.jpg",
+      images: ["/images/f.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -133,7 +139,8 @@ export default function Profile() {
     },
     {
       id: 4,
-      img: "/imgs/o.jpg",
+      images: ["/images/o.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -145,7 +152,8 @@ export default function Profile() {
     },
     {
       id: 5,
-      img: "/imgs/t.jpg",
+      images: ["/images/t.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],
@@ -157,7 +165,8 @@ export default function Profile() {
     },
     {
       id: 6,
-      img: "/imgs/o2.jpg",
+      images: ["/images/o2.jpg"],
+      type: "normal",
       time: moment().add(3, "days"),
       location: "Taipei",
       styles: ["style1", "style2"],

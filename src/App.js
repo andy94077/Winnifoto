@@ -27,7 +27,7 @@ export default function App() {
       {/* <Post
         post={{
           id: 123,
-          img: "/imgs/w.jpg",
+          images: ["/images/w.jpg"],
           time: moment().add(3, "days"),
           location: "Taipei",
           styles: ["style1", "style2"],

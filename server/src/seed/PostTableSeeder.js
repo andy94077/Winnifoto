@@ -15,7 +15,7 @@ const PostTableSeeder = {
         localtion: "Taipei City",
         styles: ["style 1", "style 2"],
         images: ["/avatars/cat.jpg", "/avatars/dog.jpg"],
-        likes: ["user 1", "user 2"],
+        likes: { "user 1": true, "user 2": true },
         comments: [
           { name: "chiachia", content: "hi" },
           { name: "benson", content: "HAHAHA" },
@@ -29,7 +29,7 @@ const PostTableSeeder = {
         localtion: "Taipei City",
         styles: ["style 1", "style 2"],
         images: ["/avatars/cat.jpg", "/avatars/dog.jpg"],
-        likes: ["user 1", "user 2"],
+        likes: { "user 1": true, "user 2": true },
         comments: [
           { name: "andy", content: "hi" },
           { name: "benson", content: "HAHAHA" },
@@ -43,7 +43,7 @@ const PostTableSeeder = {
         localtion: "Taipei City",
         styles: ["style 1", "style 2"],
         images: ["/avatars/cat.jpg", "/avatars/dog.jpg"],
-        likes: ["user 1", "user 2"],
+        likes: { "user 1": true, "user 2": true },
         comments: [
           { name: "andy", content: "hi" },
           { name: "chiachia", content: "HAHAHA" },

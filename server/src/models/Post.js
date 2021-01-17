@@ -24,7 +24,7 @@ const PostSchema = new Schema(
       type: String,
       required: [true, "type field is required."],
       validate: {
-        validator: function (v) {
+        validator(v) {
           return ["normal", "findModel", "findSnapper"].includes(v);
         },
         message: (props) =>
@@ -49,8 +49,9 @@ const PostSchema = new Schema(
       default: [],
     },
     likes: {
-      type: [String],
-      default: [],
+      type: Map,
+      of: Boolean,
+      default: {},
     },
     comments: {
       type: [CommentSchema],

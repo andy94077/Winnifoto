@@ -3,16 +3,16 @@ import Post from "../models/Post";
 const PostParser = (req) => {
   const data = {};
 
-  if (req.query.postID) data.postID = req.query.postID;
-  data.userID = req.query.userID;
-  data.token = req.query.token;
-  data.type = req.query.type;
-  if (req.query.content) data.content = req.query.content;
-  if (req.query.time) data.time = new Date(req.query.time);
-  if (req.query.location) data.localtion = req.query.location;
-  if (req.query.styles) data.styles = req.query.styles;
-  if (req.query.images) data.images = req.query.images;
-  if (req.query.username) data.username = req.query.username;
+  if (req.body.postID) data.postID = req.body.postID;
+  data.userID = req.body.userID;
+  data.token = req.body.token;
+  data.type = req.body.type;
+  if (req.body.content) data.content = req.body.content;
+  if (req.body.time) data.time = new Date(req.body.time);
+  if (req.body.location) data.localtion = req.body.location;
+  if (req.body.styles) data.styles = req.body.styles;
+  if (req.body.images) data.images = req.body.images;
+  if (req.body.username) data.username = req.body.username;
 
   return data;
 };
@@ -82,6 +82,7 @@ const PostController = {
     }
   },
   like: async (req, res) => {
+    console.log(req.body);
     const data = PostParser(req);
     if (!data.userID) {
       return res.status(403).json({ msg: "userID field is required" });
@@ -94,9 +95,10 @@ const PostController = {
     }
     const filter = { _id: data.postID };
     try {
-      const msg = await Post.updateOne(filter, {
-        $push: { likes: data.userID },
-      });
+      const result = await Post.findOne(filter);
+      if (!result.likes.has(data.userID)) result.likes.set(data.userID, true);
+      else result.likes.set(data.userID, !result.likes.get(data.userID));
+      await Post.updateOne(filter, { likes: result.likes });
       return res.json({ msg: "Success" });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });

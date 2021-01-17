@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import { MONGO_URL } from "../config";
 import UserTableSeeder from "./UserTableSeeder";
+import PostTableSeeder from "./PostTableSeeder";
 
 if (!MONGO_URL) {
   console.error("Missing MONGO_URL!!!");
@@ -16,7 +17,7 @@ mongoose.connect(MONGO_URL, {
 
 const db = mongoose.connection;
 db.once("open", async () => {
-  const seeders = [UserTableSeeder];
+  const seeders = [UserTableSeeder, PostTableSeeder];
 
   for (const seeder of seeders) {
     console.log(`Deleting table "${seeder.name}"...`);

@@ -1,7 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { GridListTile } from "@material-ui/core";
-import { FavoriteRounded, ChatBubbleRounded } from "@material-ui/icons";
+import {
+  FavoriteRounded,
+  ChatBubbleRounded,
+  PhotoLibraryRounded,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +44,17 @@ const useStyles = makeStyles({
     color: "white",
     fontSize: 17,
   },
+  icon: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    margin: 5,
+    fontSize: 20,
+    transform: "scaleX(-1)",
+    color: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    borderRadius: 5,
+  },
 });
 
 export default function PostPreview(props) {
@@ -48,12 +63,12 @@ export default function PostPreview(props) {
 
   return (
     <GridListTile
-      key={post.img}
+      key={post.images[0]}
       classes={{ root: `${classes.root} ${className}`, tile: classes.tile }}
       style={{ ...style }}
       onClick={onClick}
     >
-      <img src={post.img} alt={post.title} />
+      <img src={post.images[0]} alt={post.title} />
       <div className={classes.hover}>
         <div className={classes.block} style={{ marginRight: "10%" }}>
           <FavoriteRounded
@@ -68,6 +83,9 @@ export default function PostPreview(props) {
           <span>{post.commentsNum}</span>
         </div>
       </div>
+      {post.images.length > 1 && (
+        <PhotoLibraryRounded className={classes.icon} />
+      )}
     </GridListTile>
   );
 }

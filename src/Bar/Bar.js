@@ -42,13 +42,22 @@ const useStyles = makeStyles((theme) => ({
       flex: 1,
     },
   },
-  leftBlock: { display: "flex", alignItems: "center" },
+  leftBlock: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+  },
   middleBlock: { maxWidth: 250 },
   title: {
     display: "inline",
     marginRight: theme.spacing(1),
   },
-  tabButton: { textTransform: "none", whiteSpace: "nowrap" },
+  tabButton: {
+    textTransform: "none",
+    whiteSpace: "nowrap",
+    height: "100%",
+    borderRadius: 0,
+  },
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -96,13 +105,15 @@ const useStyles = makeStyles((theme) => ({
   offset: theme.mixins.toolbar,
 }));
 
-export default function Bar() {
+export default function Bar(props) {
+  const { channel, setChannel } = props;
   const classes = useStyles();
   const theme = useTheme();
   const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
-  // const widthMatches = useMediaQuery("(min-width:1004px)");
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
+  const handleTabChange = (newChannel) => () => setChannel(newChannel);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -194,25 +205,33 @@ export default function Bar() {
               <>
                 <Button
                   className={classes.tabButton}
-                  color="inherit"
+                  color={channel === "findModel" ? "primary" : "default"}
                   startIcon={<FaceRounded />}
+                  onClick={handleTabChange("findModel")}
                 >
                   Find Model
                 </Button>
                 <Button
                   className={classes.tabButton}
-                  color="inherit"
+                  color={channel === "findSnapper" ? "primary" : "default"}
                   startIcon={<PhotoCameraRounded />}
+                  onClick={handleTabChange("findSnapper")}
                 >
                   Find Snapper
                 </Button>
               </>
             ) : (
               <>
-                <IconButton color="inherit">
+                <IconButton
+                  color={channel === "findModel" ? "primary" : "default"}
+                  onClick={handleTabChange("findModel")}
+                >
                   <FaceRounded />
                 </IconButton>
-                <IconButton color="inherit">
+                <IconButton
+                  color={channel === "findSnapper" ? "primary" : "default"}
+                  onClick={handleTabChange("findSnapper")}
+                >
                   <PhotoCameraRounded />
                 </IconButton>
               </>

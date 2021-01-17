@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
     paddingTop: "56.25%",
-    width: "80%",
+    width: "100%",
     height: 0,
     maxWidth: 800,
     minWidth: 400,

@@ -7,6 +7,7 @@ import CustomModal from "./CustomModal";
 import Post from "./Post";
 
 const useStyles = makeStyles({
+  cardRoot: { width: "80%" },
   card: {
     top: "40%",
     transform: "translateY(-40%)",
@@ -50,7 +51,10 @@ export default function PostGrid(props) {
         ))}
       </GridList>
       <CustomModal open={openModal} setOpen={setOpenModal}>
-        <Post post={modalContent} classes={{ card: classes.card }} />
+        <Post
+          post={modalContent}
+          classes={{ root: classes.cardRoot, card: classes.card }}
+        />
       </CustomModal>
     </>
   );

@@ -2,10 +2,11 @@ import React from "react";
 import { makeStyles, Avatar, Typography } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import moment from "moment";
-
 import { useParams } from "react-router-dom";
+
 import PostGrid from "../components/PostGrid";
 import { selectUser } from "../redux/userSlice";
+import CONCAT_SERVER_URL from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -185,7 +186,7 @@ export default function Profile() {
       <div className={classes.header}>
         <Avatar
           alt={user.name}
-          src={user.avatarUri}
+          src={CONCAT_SERVER_URL(user.avatarUri)}
           className={classes.avatar}
         />
         <div style={{ marginTop: 10 }}>

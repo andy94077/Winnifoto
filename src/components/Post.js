@@ -13,6 +13,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 import CardImages from "./CardImages";
+import CONCAT_SERVER_URL from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +70,10 @@ export default function Post(props) {
             className={postClasses.header}
             avatar={
               <Link to={`/profile/${post.user.id}`}>
-                <Avatar alt={post.user.name} src={post.user.avatarUri} />
+                <Avatar
+                  alt={post.user.name}
+                  src={CONCAT_SERVER_URL(post.user.avatarUri)}
+                />
               </Link>
             }
             title={

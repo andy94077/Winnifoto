@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Profile from "./Profile/Profile";
 import Bar from "./Bar/Bar";
-import Post from "./components/Post";
 import HomePage from "./HomePage/HomePage";
-import { selectUser, setUser } from "./redux/userSlice";
+import { setUser, clearUser } from "./redux/userSlice";
 import { SERVER } from "./config";
 import { getCookie, deleteCookie } from "./cookieHelper";
+import PostPage from "./PostPage/PostPage";
 
 const useStyles = makeStyles({
   root: {
@@ -21,11 +21,9 @@ const useStyles = makeStyles({
 });
 
 export default function App() {
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [channel, setChannel] = useState("findModel");
-  const user = useSelector(selectUser);
   const classes = useStyles();
 
   useEffect(async () => {
@@ -35,10 +33,10 @@ export default function App() {
       dispatch(setUser(data));
     } catch {
       deleteCookie("token");
+      dispatch(clearUser());
     }
   }, []);
 
-  console.log("user", user);
   return (
     <div className={classes.root}>
       <Bar channel={channel} setChannel={setChannel} />
@@ -50,7 +48,7 @@ export default function App() {
           <HomePage channel={channel} />
         </Route>
         <Route exact path="/post/:postID">
-          <Post />
+          <PostPage />
         </Route>
         <Route exact path="/profile/:userID">
           <Profile />

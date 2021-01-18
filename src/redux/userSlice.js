@@ -17,9 +17,16 @@ export const userSlice = createSlice({
       state.postNum = action.payload.postNum;
       state.token = action.payload.token;
     },
+    clearUser(state) {
+      state._id = null;
+      state.name = null;
+      state.avatarUri = null;
+      state.postNum = null;
+      state.token = null;
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
 export const selectUser = (state) => state.user;
 export default userSlice.reducer;

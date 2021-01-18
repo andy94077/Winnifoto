@@ -8,7 +8,7 @@ const PostTableSeeder = {
     const users = await User.find();
     const posts = [
       {
-        userID: users[0]._id,
+        user: users[0]._id,
         type: "normal",
         content: "andy",
         time: new Date("2021-01-17"),
@@ -22,7 +22,7 @@ const PostTableSeeder = {
         ],
       },
       {
-        userID: users[1]._id,
+        user: users[1]._id,
         type: "findModel",
         content: "chiachia",
         time: Date.now(),
@@ -36,7 +36,7 @@ const PostTableSeeder = {
         ],
       },
       {
-        userID: users[0]._id,
+        user: users[0]._id,
         type: "findModel",
         content: "benson",
         time: Date.now(),
@@ -54,7 +54,10 @@ const PostTableSeeder = {
         ],
       },
     ];
-    await Post.create(posts);
+    const ret = await Post.create(posts);
+    for (const p of ret) {
+      await User.updateOne({ _id: p.user }, { $push: { posts: p._id } });
+    }
   },
 };
 

@@ -15,9 +15,9 @@ const CommentSchema = new mongoose.Schema({
 
 const PostSchema = new Schema(
   {
-    userID: {
+    user: {
       type: Schema.Types.ObjectId,
-      required: [true, "userID field is required."],
+      required: [true, "user field is required."],
       ref: "users",
     },
     type: {

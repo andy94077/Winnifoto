@@ -25,7 +25,8 @@ const UserSchema = new Schema({
       );
     },
   },
-  postNum: { type: Number, default: 0 },
+  // postNum: { type: Number, default: 0 },
+  posts: [{ type: Schema.Types.ObjectId, ref: "posts" }],
   avatarUri: { type: String, default: "/avatars/defaultAvatar.jpg" },
 });
 

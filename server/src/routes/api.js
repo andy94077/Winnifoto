@@ -72,7 +72,6 @@ router
   )
   .delete(Authentication.verifyPost, PostController.delete);
 router.put("/post/like", Authentication.verifyPost, PostController.like);
-router
-  .put("/post/comment", Authentication.verifyPost, PostController.comment);
+router.put("/post/comment", Authentication.verifyPost, PostController.comment);
 
 export default router;

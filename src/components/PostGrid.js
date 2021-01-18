@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { GridList, Typography } from "@material-ui/core";
+import { GridList } from "@material-ui/core";
 import { useTheme, makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { PhotoCameraOutlined } from "@material-ui/icons";
 
 import PostPreview from "./PostPreview";
 import CustomModal from "./CustomModal";

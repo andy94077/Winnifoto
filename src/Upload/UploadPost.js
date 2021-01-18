@@ -13,9 +13,11 @@ import {
 import { AccessTime, Place, CloudUploadRounded } from "@material-ui/icons";
 import moment from "moment";
 import { Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import CardImages from "../components/CardImages";
 import { SERVER } from "../config";
+import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +81,7 @@ export default function UploadPost(props) {
     className = "",
     classes: classesProps = { root: "", card: "" },
   } = props;
+  const user = useSelector(selectUser);
   const history = useHistory();
   const classes = useStyles();
   const [uploaded, setUploaded] = useState(false);
@@ -119,9 +122,19 @@ export default function UploadPost(props) {
   };
 
   const handleSubmit = async () => {
-    const { newStyles, urls, ...data } = post;
+    const { newStyle, urls, ...data } = post;
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+    formData.append("user", user.id);
+    formData.append("token", user.token);
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
     try {
-      await SERVER.post("/post", data);
+      await SERVER.post("/post", formData, config);
       history.go(0);
     } catch (err) {
       console.log(err.response);

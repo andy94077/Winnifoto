@@ -3,14 +3,14 @@ import User from "../models/User";
 
 const PostController = {
   async index(req, res) {
-    const { userID } = req.query;
-    const posts = await Post.find({ userID });
+    const { user } = req.query;
+    const posts = await Post.find({ user }).populate("user", "name");
     return res.json({ posts });
   },
   async create(req, res) {
     const data = req.body;
-    if (!data.userID)
-      return res.status(403).json({ msg: "userID field is required" });
+    if (!data.user)
+      return res.status(403).json({ msg: "user field is required" });
     if (!data.token)
       return res.status(403).json({ msg: "token field is required" });
     if (!data.type)
@@ -21,7 +21,7 @@ const PostController = {
         .json({ msg: "Need images field or content field" });
     try {
       const msg = await Post.create(data);
-      await User.updateOne({ _id: data.userID }, { $inc: { postNum: 1 } });
+      await User.updateOne({ _id: data.user }, { $inc: { postNum: 1 } });
       return res.json({ msg });
     } catch (err) {
       console.log(err);
@@ -30,8 +30,8 @@ const PostController = {
   },
   async update(req, res) {
     const data = req.body;
-    if (!data.userID) {
-      return res.status(403).json({ msg: "userID field is required" });
+    if (!data.user) {
+      return res.status(403).json({ msg: "user field is required" });
     }
     if (!data.token) {
       return res.status(403).json({ msg: "token field is required" });
@@ -49,8 +49,8 @@ const PostController = {
   },
   async delete(req, res) {
     const data = req.body;
-    if (!data.userID) {
-      return res.status(403).json({ msg: "userID field is required" });
+    if (!data.user) {
+      return res.status(403).json({ msg: "user field is required" });
     }
     if (!data.token) {
       return res.status(403).json({ msg: "token field is required" });
@@ -68,8 +68,8 @@ const PostController = {
   },
   async like(req, res) {
     const data = req.body;
-    if (!data.userID) {
-      return res.status(403).json({ msg: "userID field is required" });
+    if (!data.user) {
+      return res.status(403).json({ msg: "user field is required" });
     }
     if (!data.token) {
       return res.status(403).json({ msg: "token field is required" });
@@ -80,8 +80,8 @@ const PostController = {
     const filter = { _id: data.postID };
     try {
       const result = await Post.findOne(filter);
-      if (!result.likes.has(data.userID)) result.likes.set(data.userID, true);
-      else result.likes.set(data.userID, !result.likes.get(data.userID));
+      if (!result.likes.has(data.user)) result.likes.set(data.user, true);
+      else result.likes.set(data.user, !result.likes.get(data.user));
       await Post.updateOne(filter, { likes: result.likes });
       return res.json({ msg: "Success" });
     } catch (err) {
@@ -90,8 +90,8 @@ const PostController = {
   },
   async comment(req, res) {
     const data = req.body;
-    if (!data.userID) {
-      return res.status(403).json({ msg: "userID field is required" });
+    if (!data.user) {
+      return res.status(403).json({ msg: "user field is required" });
     }
     if (!data.token) {
       return res.status(403).json({ msg: "token field is required" });
@@ -102,7 +102,7 @@ const PostController = {
     if (!data.comment) {
       return res.status(403).json({ msg: "comment field is required" });
     }
-    const user = await User.findById(data.userID);
+    const user = await User.findById(data.user);
     const filter = { _id: data.postID };
     try {
       const msg = await Post.updateOne(filter, {

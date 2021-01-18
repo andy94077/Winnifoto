@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 import { selectUser } from "../redux/userSlice";
 import Post from "../components/Post";
+import UploadPost from "../Upload/UploadPost";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
 export default function HomePage(props) {
   const { channel } = props;
   const { searchKey } = useParams();
-  const user = useSelector(selectUser);
+  const user = { id: 0, name: "Yueh", avatarUri: "/images/y.jpg" };
+  // const user = useSelector(selectUser);
   const classes = useStyles();
 
   const posts = [
@@ -154,6 +156,7 @@ export default function HomePage(props) {
 
   return (
     <div className={classes.root}>
+      <UploadPost />
       {posts
         .filter((post) => post.type === channel)
         .map((post) => (

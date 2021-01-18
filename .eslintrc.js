@@ -23,5 +23,6 @@ module.exports = {
     "no-unused-vars": "warn",
     "no-underscore-dangle": 0,
     "no-restricted-syntax": 0,
+    "no-await-in-loop": 0,
   },
 };

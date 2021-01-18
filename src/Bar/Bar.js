@@ -25,6 +25,7 @@ import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignIn/SignUp";
 import CONCAT_SERVER_URL from "../utils";
 import { selectUser } from "../redux/userSlice";
+import { deleteCookie } from "../cookieHelper";
 
 const useStyles = makeStyles((theme) => ({
   grow: { flexGrow: 1, width: "100%" },
@@ -130,7 +131,10 @@ export default function Bar(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleGoToProfile = () => history.push(`/profile/${user._id}`);
+  const handleSignOut = () => {
+    deleteCookie("token");
+    history.go(0);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -143,6 +147,12 @@ export default function Bar(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleGoToProfile = () => {
+    handleMobileMenuClose();
+    handleMenuClose();
+    history.push(`/profile/${user._id}`);
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -161,7 +171,7 @@ export default function Bar(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
+      <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
     </Menu>
   );
 
@@ -184,7 +194,7 @@ export default function Bar(props) {
       ) : (
         <>
           <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
-          <MenuItem>Sign Out</MenuItem>
+          <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
         </>
       )}
     </Menu>
@@ -283,11 +293,16 @@ export default function Bar(props) {
                 <Button onClick={handleOpenSignUp}>Sign Up</Button>
               </>
             ) : (
-              <Avatar
-                alt={user.name}
-                src={CONCAT_SERVER_URL(user.avatarUri)}
+              <Button
                 onClick={handleProfileMenuOpen}
-              />
+                style={{ textTransform: "none" }}
+              >
+                <Avatar
+                  alt={user.name}
+                  src={CONCAT_SERVER_URL(user.avatarUri)}
+                />
+                {user.name}
+              </Button>
             )}
           </div>
           <div className={`${classes.block} ${classes.sectionMobile}`}>

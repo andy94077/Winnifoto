@@ -8,6 +8,7 @@ import morgan from "morgan";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import http from "http";
+import cookieParser from "cookie-parser";
 
 import { MONGO_URL, PORT, NODE_ENV } from "./config";
 import routes from "./routes";
@@ -16,13 +17,22 @@ const app = express();
 const server = http.createServer(app);
 const isProduction = NODE_ENV === "production";
 
-app.use(cors());
-
+app.use(cors({ credentials: true }));
+app.use((req, res, next) => {
+  // res.header("Content-Type", "application/json;charset=UTF-8");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 // Normal express config defaults
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 

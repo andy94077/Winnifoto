@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Switch, Route, useLocation } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Profile from "./Profile/Profile";
 import Bar from "./Bar/Bar";
 import Post from "./components/Post";
 import HomePage from "./HomePage/HomePage";
-import { selectUser } from "./redux/userSlice";
+import { selectUser, setUser } from "./redux/userSlice";
+import { SERVER } from "./config";
+import { getCookie, deleteCookie } from "./cookieHelper";
 
 const useStyles = makeStyles({
   root: {
@@ -15,16 +17,26 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    backgroundColor: "#f5f5f5",
   },
 });
 
 export default function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [channel, setChannel] = useState("findModel");
   const user = useSelector(selectUser);
   const classes = useStyles();
+
+  useEffect(async () => {
+    const token = getCookie("token");
+    try {
+      const { data } = await SERVER.post("/authenticate", { token });
+      dispatch(setUser(data));
+    } catch {
+      deleteCookie("token");
+    }
+  }, []);
 
   console.log("user", user);
   return (

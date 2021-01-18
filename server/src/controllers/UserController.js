@@ -38,18 +38,26 @@ const UserController = {
         name: username,
         password: bcrypt.hashSync(password, 10),
       });
-      return res.json({
-        _id: user._id,
-        name: user.name,
-        avatarUri: user.avatarUri,
-        postNum: user.postNum,
-        token: user.token,
-      });
+      res.cookie("token", user.token, { httpOnly: true });
+      return res.json({ token: user.token });
     } catch (err) {
       return res
         .status(403)
         .json({ msg: { username: err.errors.name.message } });
     }
+  },
+  async authenticate(req, res) {
+    const user = await User.find({ token: req.body.token });
+    if (user.length === 1) {
+      return res.json({
+        _id: user[0]._id,
+        name: user[0].name,
+        avatarUri: user[0].avatarUri,
+        postNum: user[0].postNum,
+        token: user[0].token,
+      });
+    }
+    return res.status(403).json({ msg: "token is incorrect." });
   },
   async login(req, res) {
     const user = await User.find({ name: req.body.username });
@@ -58,13 +66,11 @@ const UserController = {
         return res.status(403).json({
           msg: { password: "Incorrect password." },
         });
-      return res.json({
-        _id: user[0]._id,
-        name: user[0].name,
-        avatarUri: user[0].avatarUri,
-        postNum: user[0].postNum,
-        token: user[0].token,
-      });
+      // console.log("gogogo");
+      // res.setHeader("Cache-Control", "private");
+      // res.cookie("token", user[0].token, { httpOnly: true });
+      // return res.send("done");
+      return res.json({ token: user[0].token });
     }
     return res.status(403).json({ msg: { username: "Username not found." } });
   },

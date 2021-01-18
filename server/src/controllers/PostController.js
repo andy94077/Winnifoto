@@ -3,8 +3,8 @@ import User from "../models/User";
 
 const PostController = {
   async index(req, res) {
-    const { user } = req.query;
-    const posts = await Post.find({ user }).populate("user", "name");
+    const { postID } = req.query || "";
+    const posts = await Post.find({ _id: postID }).populate("user", "name");
     return res.json({ posts });
   },
   async create(req, res) {

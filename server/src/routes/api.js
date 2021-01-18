@@ -51,7 +51,7 @@ router
   .post(UserController.create)
   .put(
     uploadAvatar.single("avatar"),
-    Authentication.verifyUser,
+    Authentication.verifyUserID,
     UserController.updateAvatar
   );
 router.post("/login", multipartFormData.any(), UserController.login);
@@ -71,7 +71,8 @@ router
     PostController.update
   )
   .delete(Authentication.verifyPost, PostController.delete);
-router.put("/post/like", Authentication.verifyPost, PostController.like);
-router.put("/post/comment", Authentication.verifyPost, PostController.comment);
+router.put("/post/like", Authentication.verifyUser, PostController.like);
+router.put("/post/comment", Authentication.verifyUser, PostController.comment);
+
 
 export default router;

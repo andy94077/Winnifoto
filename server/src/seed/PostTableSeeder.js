@@ -54,7 +54,10 @@ const PostTableSeeder = {
         ],
       },
     ];
-    await Post.create(posts);
+    const ret = await Post.create(posts);
+    for (const p of ret) {
+      await User.updateOne({ _id: p.user }, { $push: { posts: p._id } });
+    }
   },
 };
 

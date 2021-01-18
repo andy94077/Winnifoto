@@ -2,9 +2,21 @@ import bcrypt from "bcrypt";
 import fs from "fs";
 import { Magic } from "mmmagic";
 import User from "../models/User";
+import Post from "../models/Post";
 
 const UserController = {
   async index(req, res) {
+    if (req.query.username && req.query.userID)
+      return res
+        .status(403)
+        .json({ msg: "Cannot pass both username and userID." });
+    if (req.query.userID) {
+      const posts = await Post.find({ user: req.query.userID }).populate(
+        "user",
+        "name"
+      );
+      return res.json({ posts });
+    }
     const substr = new RegExp(req.query.username, "i");
     const users = await User.find({ name: substr });
     return res.json({ users });

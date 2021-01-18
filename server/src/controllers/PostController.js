@@ -4,8 +4,12 @@ import User from "../models/User";
 const PostController = {
   async index(req, res) {
     const { postID } = req.query || "";
-    const posts = await Post.find({ _id: postID }).populate("user", "name");
-    return res.json({ posts });
+    if (!postID) {
+      const posts = await Post.find({}).populate("user", "name");
+      return res.json({ posts });
+    }
+    const post = await Post.findById(postID).populate("user", "name");
+    return res.json({ post });
   },
   async create(req, res) {
     const data = req.body;
@@ -24,7 +28,6 @@ const PostController = {
       await User.updateOne({ _id: data.user }, { $inc: { postNum: 1 } });
       return res.json({ msg });
     } catch (err) {
-      console.log(err);
       return res.status(403).json({ msg: err.errors.type.message });
     }
   },

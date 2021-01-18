@@ -111,15 +111,16 @@ const PostController = {
     if (!data.postID) {
       return res.status(403).json({ msg: "postID field is required" });
     }
-    const filter = { _id: data.postID };
     try {
-      const result = await Post.findOne(filter);
+      const result = await Post.findById(data.postID);
+      if (result === null)
+        return res.status(404).json({ msg: "Post Not Found" });
       if (!result.likes.has(data.user)) result.likes.set(data.user, true);
       else result.likes.set(data.user, !result.likes.get(data.user));
-      await Post.updateOne(filter, { likes: result.likes });
+      await Post.updateOne({ _id: data.postID }, { likes: result.likes });
       return res.json({ msg: "Success" });
     } catch (err) {
-      return res.status(403).json({ msg: err.errors.name.message });
+      return res.status(403).json({ msg: err });
     }
   },
   async comment(req, res) {

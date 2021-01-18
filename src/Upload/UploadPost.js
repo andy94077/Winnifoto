@@ -11,7 +11,6 @@ import {
   CardActions,
 } from "@material-ui/core";
 import { AccessTime, Place, CloudUploadRounded } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import CardImages from "../components/CardImages";
@@ -82,12 +81,11 @@ export default function UploadPost(props) {
     classes: classesProps = { root: "", card: "" },
   } = props;
   const user = useSelector(selectUser);
-  const history = useHistory();
   const classes = useStyles();
   const [uploaded, setUploaded] = useState(false);
   const [post, setPost] = useState({
     type: channel,
-    time: "", // moment().format("yyyy-MM-DDThh:mm"),
+    time: "",
     location: "",
     newStyle: "",
     styles: [],
@@ -122,24 +120,34 @@ export default function UploadPost(props) {
   };
 
   const handleSubmit = async () => {
-    const { newStyle, urls, images, ...data } = post;
+    const { newStyle, urls, images, styles, ...data } = post;
+    if (newStyle !== "") styles.push(newStyle);
+
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => formData.append(key, value));
     formData.append("user", user._id);
-    for (const img of post.images) {
+    for (const img of images) {
       formData.append("images", img);
     }
+    for (const style of styles) {
+      formData.append("styles", style);
+    }
+
     formData.append("token", user.token);
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-
     try {
-      await SERVER.post("/post", formData, config);
-      // history.go(0);
+      await SERVER.post("/post", formData);
+      setPost({
+        type: channel,
+        time: "",
+        location: "",
+        newStyle: "",
+        styles: [],
+        content: "",
+        urls: [],
+        images: [],
+      });
+      setUploaded(false);
     } catch (err) {
       console.log(err.response);
     }

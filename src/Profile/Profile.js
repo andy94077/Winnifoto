@@ -5,12 +5,14 @@ import {
   Typography,
   CircularProgress,
 } from "@material-ui/core";
+import { AccountCircleOutlined } from "@material-ui/icons";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 
 import PostGrid from "../components/PostGrid";
 import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
+import ErrorMessage from "../components/ErrorMessage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,13 +65,13 @@ const useStyles = makeStyles((theme) => ({
 export default function Profile() {
   const { userID } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState({ error: false, msg: "" });
   const [profileUser, setProfileUser] = useState({
     id: null,
     name: "",
     avatarUri: "",
     posts: [],
-  }); // { id: 0, name: "Yueh", avatarUri: "/images/y.jpg" };
-  // const user = useSelector(selectUser);
+  });
   const classes = useStyles();
 
   useEffect(async () => {
@@ -82,18 +84,27 @@ export default function Profile() {
           ...post,
           likesNum: Object.keys(post.likes).length,
           commentsNum: post.comments.length,
-          time: post.time === "" ? "" : moment(post.time),
+          time: post.time === "" || post.time === null ? "" : moment(post.time),
           user: { _id: post.user, name: data.name, avatarUri: data.avatarUri },
           createAt: moment(post.createAt),
         })),
       });
-      setIsLoading(false);
     } catch (err) {
-      console.log(err.response);
+      setError({ error: true, msg: err.response.data.msg });
+    } finally {
+      setIsLoading(false);
     }
   }, [userID]);
 
   if (isLoading) return <CircularProgress />;
+  if (error.error)
+    return (
+      <ErrorMessage
+        msg={error.msg}
+        icon={<AccountCircleOutlined />}
+        circle={false}
+      />
+    );
   return (
     <div className={classes.root}>
       <div className={classes.header}>

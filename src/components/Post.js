@@ -55,20 +55,25 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 5,
   },
   chip: { margin: "5px 3px 0 0", height: 30 },
+  link: { textDecoration: "none", color: "black" },
 }));
 
 export default function Post(props) {
-  const { post, className = "", classes = { root: "", card: "" } } = props;
+  const {
+    post,
+    className = "",
+    classes: classesParam = { root: "", card: "" },
+  } = props;
   const location = useLocation();
-  const postClasses = useStyles();
+  const classes = useStyles();
 
   return (
-    <div className={`${postClasses.root} ${className} ${classes.root}`}>
-      <Card className={`${postClasses.card} ${classes.card}`}>
+    <div className={`${classes.root} ${className} ${classesParam.root}`}>
+      <Card className={`${classes.card} ${classesParam.card}`}>
         <CardImages images={post.images} />
-        <div className={postClasses.details}>
+        <div className={classes.details}>
           <CardHeader
-            className={postClasses.header}
+            className={classes.header}
             avatar={
               location.pathname === `/profile/${post.user._id}` ? (
                 <Avatar
@@ -76,7 +81,7 @@ export default function Post(props) {
                   src={CONCAT_SERVER_URL(post.user.avatarUri)}
                 />
               ) : (
-                <Link to={`/profile/${post.user._id}`}>
+                <Link to={`/profile/${post.user._id}`} className={classes.link}>
                   <Avatar
                     alt={post.user.name}
                     src={CONCAT_SERVER_URL(post.user.avatarUri)}
@@ -89,6 +94,7 @@ export default function Post(props) {
                 post.user.name
               ) : (
                 <Link
+                  className={classes.link}
                   to={`/profile/${post.user._id}`}
                   style={{ textDecoration: "none" }}
                 >
@@ -97,28 +103,44 @@ export default function Post(props) {
               )
             }
             subheader={
-              post.createAt - moment().subtract(5, "days")
-                ? post.createAt.calendar()
-                : post.createAt.fromNow()
+              location.pathname === `/profile/${post._id}` ? (
+                post.createAt - moment().subtract(5, "days") ? (
+                  post.createAt.calendar()
+                ) : (
+                  post.createAt.fromNow()
+                )
+              ) : (
+                <Link to={`/post/${post._id}`} className={classes.link}>
+                  {post.createAt - moment().subtract(5, "days")
+                    ? post.createAt.calendar()
+                    : post.createAt.fromNow()}
+                </Link>
+              )
             }
           />
           <div style={{ margin: "10px 0 0 13px" }}>
-            {Object.prototype.hasOwnProperty.call(post, "time") && (
-              <div className={postClasses.tag}>
-                <AccessTime color="primary" style={{ marginRight: "0.5em" }} />
-                {post.time.format("MM/DD/YYYY, h:mm a")}
-              </div>
-            )}
-            {Object.prototype.hasOwnProperty.call(post, "location") && (
-              <div className={postClasses.tag}>
-                <Place color="primary" style={{ marginRight: "0.5em" }} />
-                {post.location}
-              </div>
-            )}
+            {Object.prototype.hasOwnProperty.call(post, "time") &&
+              post.time !== "" && (
+                <div className={classes.tag}>
+                  <AccessTime
+                    color="primary"
+                    style={{ marginRight: "0.5em" }}
+                  />
+                  {post.time.format("MM/DD/YYYY, h:mm a")}
+                </div>
+              )}
+            {Object.prototype.hasOwnProperty.call(post, "location") &&
+              post.location !== "" && (
+                <div className={classes.tag}>
+                  <Place color="primary" style={{ marginRight: "0.5em" }} />
+                  {post.location}
+                </div>
+              )}
             {Object.prototype.hasOwnProperty.call(post, "styles") &&
+              post.styles.length > 0 &&
               post.styles.map((style) => (
                 <Chip
-                  className={postClasses.chip}
+                  className={classes.chip}
                   key={style}
                   label={style}
                   color="primary"
@@ -126,7 +148,7 @@ export default function Post(props) {
                 />
               ))}
           </div>
-          <CardContent className={postClasses.content}>
+          <CardContent className={classes.content}>
             <Typography variant="subtitle1" color="textSecondary">
               {post.content}
             </Typography>

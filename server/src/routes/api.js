@@ -1,12 +1,14 @@
 import { Router } from "express";
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+
 import UserController from "../controllers/UserController";
 import PostController from "../controllers/PostController";
 
 const storageAvatar = multer.diskStorage({
   destination: "public/avatars/tmp/",
   filename: (req, file, cb) => {
-    cb(null, `IMAGE-${Date.now()}.jpg`);
+    cb(null, `IMG_${uuidv4()}.jpg`);
   },
 });
 
@@ -24,7 +26,7 @@ const uploadAvatar = multer({
 const storagePost = multer.diskStorage({
   destination: "public/postImg/tmp",
   filename: (req, file, cb) => {
-    cb(null, `POSTIMG-${Date.now()}.jpg`);
+    cb(null, `IMG_${uuidv4()}.jpg`);
   },
 });
 
@@ -56,7 +58,7 @@ router
   .post(uploadPost.array("images", 10), PostController.create)
   .put(uploadPost.array("images", 10), PostController.update)
   .delete(PostController.delete);
-router.route("/post/like").put(PostController.like);
-router.route("/post/comment").put(PostController.comment);
+router.put("/post/like", PostController.like);
+router.put("/post/comment", PostController.comment);
 
 export default router;

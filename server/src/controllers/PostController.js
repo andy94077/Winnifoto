@@ -10,11 +10,17 @@ const PostController = {
       const posts = await Post.find({}).populate("user", ["name", "avatarUri"]);
       return res.json(posts);
     }
-    const post = await Post.findById(postID).populate("user", [
-      "name",
-      "avatarUri",
-    ]);
-    return res.json(post);
+    try {
+      const post = await Post.findById(postID).populate("user", [
+        "name",
+        "avatarUri",
+      ]);
+      if (post === null)
+        return res.status(404).json({ msg: "Post Not Found." });
+      return res.json(post);
+    } catch {
+      return res.status(403).json({ msg: "Post Not Found." });
+    }
   },
   async create(req, res) {
     const data = req.body;
@@ -37,9 +43,7 @@ const PostController = {
           if (err) res.status(403).json({ msg: err });
         });
       for (const fp of req.files) {
-        const newPath = `/postImg/${ret._id}/${
-          fp.filename.split(".")[0].split("-")[1]
-        }.jpg`;
+        const newPath = `/postImg/${ret._id}/${fp.filename}`;
 
         fs.renameSync(fp.path, path.join("public", newPath), (err) => {
           if (err) res.status(403).json(err);

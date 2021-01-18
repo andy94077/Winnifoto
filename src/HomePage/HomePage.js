@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, CircularProgress } from "@material-ui/core";
 import moment from "moment";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Post from "../components/Post";
 import UploadPost from "../Upload/UploadPost";
 import { SERVER } from "../config";
+import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HomePage(props) {
   const { channel } = props;
+  const user = useSelector(selectUser);
   const { searchKey } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -39,7 +42,7 @@ export default function HomePage(props) {
       setPosts(
         data.map((post) => ({
           ...post,
-          time: post.time === "" ? "" : moment(post.time),
+          time: post.time === "" || post.time === null ? "" : moment(post.time),
           createAt: moment(post.createAt),
         }))
       );
@@ -53,7 +56,7 @@ export default function HomePage(props) {
 
   return (
     <div className={classes.root}>
-      <UploadPost channel={channel} />
+      {user._id !== null && <UploadPost channel={channel} />}
       {posts
         .filter((post) => post.type === channel)
         .map((post) => (

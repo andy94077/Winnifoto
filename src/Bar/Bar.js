@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline",
     marginRight: theme.spacing(1),
   },
-  link: { textDecoration: "none", height: "100%" },
+  link: { textDecoration: "none", height: "100%", color: "black" },
   tabButton: {
     textTransform: "none",
     whiteSpace: "nowrap",
@@ -206,7 +206,9 @@ export default function Bar(props) {
         <Toolbar className={classes.toolbar}>
           <div className={`${classes.block} ${classes.leftBlock}`}>
             <Typography className={classes.title} variant="h6">
-              Winnifoto
+              <Link to="/" className={classes.link}>
+                Winnifoto
+              </Link>
             </Typography>
 
             {widthMatches ? (
@@ -300,6 +302,7 @@ export default function Bar(props) {
                 <Avatar
                   alt={user.name}
                   src={CONCAT_SERVER_URL(user.avatarUri)}
+                  style={{ marginRight: 8 }}
                 />
                 {user.name}
               </Button>

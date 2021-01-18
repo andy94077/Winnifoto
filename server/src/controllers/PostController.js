@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import Post from "../models/Post";
 import User from "../models/User";
 
@@ -16,24 +17,43 @@ const PostController = {
     return res.json(post);
   },
   async create(req, res) {
-    console.log(req.body, req.file, req.files);
     const data = req.body;
+    if (!data.user)
+      return res.status(403).json({ msg: "user field is required" });
     if (!data.type)
       return res.status(403).json({ msg: "type field is required" });
-    if (!data.images && !data.content)
+    if (req.files.length === 0 && !data.content) {
       return res
         .status(403)
         .json({ msg: "Need images field or content field" });
+    }
+    // return res.json({ msg: "Still testing" });
     try {
-      const ret = await Post.create(data);
-      console.log(data.images.length);
-      // for (const img of data.images) {
-      //   fs.writeFile("public/avatars/tmpOAO.png", img, "binary", (err) => {
-      //     if (err) return res.status(403).json({ msg: err });
-      //   });
-      // }
+      let ret = await Post.create(data);
       await User.updateOne({ _id: data.user }, { $push: { posts: ret._id } });
-      return res.json({ ret });
+
+      if (req.files.length >= 0)
+        fs.mkdirSync(`public/postImg/${ret._id}/`, (err) => {
+          if (err) res.status(403).json({ msg: err });
+        });
+      for (const fp of req.files) {
+        const newPath = `/postImg/${ret._id}/${
+          fp.filename.split(".")[0].split("-")[1]
+        }.jpg`;
+
+        fs.renameSync(fp.path, path.join("public", newPath), (err) => {
+          if (err) res.status(403).json(err);
+        });
+
+        ret = await Post.findOneAndUpdate(
+          { _id: ret._id },
+          {
+            $push: { images: newPath },
+          },
+          { new: true }
+        ).populate("user", ["name", "avatarUri"]);
+      }
+      return res.json(ret);
     } catch (err) {
       return res.status(403).json({ msg: err });
     }

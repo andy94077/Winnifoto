@@ -68,6 +68,7 @@ mongoose.connect(MONGO_URL, {
   useCreateIndex: true,
 });
 
+mongoose.set("useFindAndModify", false);
 const db = mongoose.connection;
 
 db.on("error", (error) => {

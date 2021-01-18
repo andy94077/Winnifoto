@@ -69,16 +69,13 @@ const UserController = {
     return res.status(403).json({ msg: { username: "Username not found." } });
   },
   async updateAvatar(req, res) {
-    console.log("OAO", req.body, req.file);
-    console.log(req.file.destination);
-
     try {
       const newPath = `/avatars/${req.body.userID}.jpg`;
       const post = await User.updateOne(
         { _id: req.body.userID },
-        { avatar: newPath }
+        { avatarUri: newPath }
       );
-      fs.rename(
+      fs.renameSync(
         path.join(req.file.destination, req.file.filename),
         path.join("public", newPath),
         (err) => {

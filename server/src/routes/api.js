@@ -6,8 +6,6 @@ import PostController from "../controllers/PostController";
 const storageAvatar = multer.diskStorage({
   destination: "public/avatars/tmp/",
   filename: (req, file, cb) => {
-    console.log(req.body);
-    console.log(file);
     cb(null, `IMAGE-${Date.now()}.jpg`);
   },
 });
@@ -24,16 +22,20 @@ const uploadAvatar = multer({
 });
 
 const storagePost = multer.diskStorage({
-  destination: "public/postImg/",
+  destination: "public/postImg/tmp",
   filename: (req, file, cb) => {
-    console.log(req.body);
-    console.log(file);
-    cb(null, "IMAGE-tmp.jpg");
+    cb(null, `POSTIMG-${Date.now()}.jpg`);
   },
 });
 
 const uploadPost = multer({
   storage: storagePost,
+  fileFilter: (req, file, callback) => {
+    if (!file.mimetype.includes("image")) {
+      return callback("Only images are allowed");
+    }
+    return callback(null, true);
+  },
   limits: { fileSize: 100000000 },
 });
 

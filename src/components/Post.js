@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { AccessTime, Place } from "@material-ui/icons";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import CardImages from "./CardImages";
 import CONCAT_SERVER_URL from "../utils";
@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Post(props) {
   const { post, className = "", classes = { root: "", card: "" } } = props;
+  const location = useLocation();
   const postClasses = useStyles();
 
   return (
@@ -69,20 +70,31 @@ export default function Post(props) {
           <CardHeader
             className={postClasses.header}
             avatar={
-              <Link to={`/profile/${post.user._id}`}>
+              location.pathname === `/profile/${post.user._id}` ? (
                 <Avatar
                   alt={post.user.name}
                   src={CONCAT_SERVER_URL(post.user.avatarUri)}
                 />
-              </Link>
+              ) : (
+                <Link to={`/profile/${post.user._id}`}>
+                  <Avatar
+                    alt={post.user.name}
+                    src={CONCAT_SERVER_URL(post.user.avatarUri)}
+                  />
+                </Link>
+              )
             }
             title={
-              <Link
-                to={`/profile/${post.user._id}`}
-                style={{ textDecoration: "none" }}
-              >
-                {post.user.name}
-              </Link>
+              location.pathname === `/profile/${post.user._id}` ? (
+                post.user.name
+              ) : (
+                <Link
+                  to={`/profile/${post.user._id}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  {post.user.name}
+                </Link>
+              )
             }
             subheader={
               post.createAt - moment().subtract(5, "days")

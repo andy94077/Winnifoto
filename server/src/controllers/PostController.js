@@ -108,7 +108,7 @@ const PostController = {
     const user = await User.findById(data.user);
     const filter = { _id: data.postID };
     try {
-      const msg = await Post.updateOne(filter, {
+      await Post.updateOne(filter, {
         $push: { comments: { name: user.name, content: data.comment } },
       });
       return res.json({ msg: "Success" });

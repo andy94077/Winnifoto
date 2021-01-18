@@ -58,7 +58,7 @@ const PostSchema = new Schema(
       default: [],
     },
   },
-  { timestamps: { createdAt: "created_at" } }
+  { timestamps: true }
 );
 
 // Creating a table within database with the defined schema

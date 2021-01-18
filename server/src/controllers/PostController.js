@@ -2,12 +2,12 @@ import Post from "../models/Post";
 import User from "../models/User";
 
 const PostController = {
-  index: async (req, res) => {
+  async index(req, res) {
     const { userID } = req.query;
     const posts = await Post.find({ userID });
     return res.json({ posts });
   },
-  create: async (req, res) => {
+  async create(req, res) {
     const data = req.body;
     if (!data.userID)
       return res.status(403).json({ msg: "userID field is required" });
@@ -28,7 +28,7 @@ const PostController = {
       return res.status(403).json({ msg: err.errors.type.message });
     }
   },
-  update: async (req, res) => {
+  async update(req, res) {
     const data = req.body;
     if (!data.userID) {
       return res.status(403).json({ msg: "userID field is required" });
@@ -47,7 +47,7 @@ const PostController = {
       return res.status(403).json({ msg: err.errors.name.message });
     }
   },
-  delete: async (req, res) => {
+  async delete(req, res) {
     const data = req.body;
     if (!data.userID) {
       return res.status(403).json({ msg: "userID field is required" });
@@ -66,7 +66,7 @@ const PostController = {
       return res.status(403).json({ msg: err.errors.name.message });
     }
   },
-  like: async (req, res) => {
+  async like(req, res) {
     const data = req.body;
     if (!data.userID) {
       return res.status(403).json({ msg: "userID field is required" });
@@ -88,7 +88,7 @@ const PostController = {
       return res.status(403).json({ msg: err.errors.name.message });
     }
   },
-  comment: async (req, res) => {
+  async comment(req, res) {
     const data = req.body;
     if (!data.userID) {
       return res.status(403).json({ msg: "userID field is required" });

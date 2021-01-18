@@ -69,7 +69,7 @@ export default function Post(props) {
           <CardHeader
             className={postClasses.header}
             avatar={
-              <Link to={`/profile/${post.user.id}`}>
+              <Link to={`/profile/${post.user._id}`}>
                 <Avatar
                   alt={post.user.name}
                   src={CONCAT_SERVER_URL(post.user.avatarUri)}
@@ -78,7 +78,7 @@ export default function Post(props) {
             }
             title={
               <Link
-                to={`/profile/${post.user.id}`}
+                to={`/profile/${post.user._id}`}
                 style={{ textDecoration: "none" }}
               >
                 {post.user.name}
@@ -116,7 +116,7 @@ export default function Post(props) {
           </div>
           <CardContent className={postClasses.content}>
             <Typography variant="subtitle1" color="textSecondary">
-              {post.body}
+              {post.content}
             </Typography>
           </CardContent>
         </div>

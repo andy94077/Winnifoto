@@ -11,8 +11,7 @@ import {
   CardActions,
 } from "@material-ui/core";
 import { AccessTime, Place, CloudUploadRounded } from "@material-ui/icons";
-import moment from "moment";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import CardImages from "../components/CardImages";
@@ -126,7 +125,7 @@ export default function UploadPost(props) {
     const { newStyle, urls, ...data } = post;
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => formData.append(key, value));
-    formData.append("user", user.id);
+    formData.append("user", user._id);
     formData.append("token", user.token);
 
     const config = {

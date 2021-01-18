@@ -22,6 +22,11 @@ const UserTableSeeder = {
         avatarUri: "/avatars/dog2.jpg",
       },
       {
+        name: "yueh",
+        password: bcrypt.hashSync("yueh", 10),
+        avatarUri: "/avatars/y.jpg",
+      },
+      {
         name: "test",
         password: bcrypt.hashSync("test", 10),
         token: "test",

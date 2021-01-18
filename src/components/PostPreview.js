@@ -6,6 +6,7 @@ import {
   ChatBubbleRounded,
   PhotoLibraryRounded,
 } from "@material-ui/icons";
+import CONCAT_SERVER_URL from "../utils";
 
 const useStyles = makeStyles({
   root: {
@@ -68,7 +69,7 @@ export default function PostPreview(props) {
       style={{ ...style }}
       onClick={onClick}
     >
-      <img src={post.images[0]} alt={post.title} />
+      <img src={CONCAT_SERVER_URL(post.images[0])} alt={post.title} />
       <div className={classes.hover}>
         <div className={classes.block} style={{ marginRight: "10%" }}>
           <FavoriteRounded

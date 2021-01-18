@@ -6,6 +6,7 @@ import {
   KeyboardArrowRightRounded,
 } from "@material-ui/icons";
 import clsx from "clsx";
+import CONCAT_SERVER_URL from "../utils";
 
 const useStyles = makeStyles({
   root: {
@@ -52,7 +53,7 @@ export default function CardImages(props) {
             [classes.active]: i === imgIndex,
             [className]: className !== "" && className !== undefined,
           })}
-          image={image}
+          image={CONCAT_SERVER_URL(image)}
         />
       ))}
       {imgIndex > 0 && (

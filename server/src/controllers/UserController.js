@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import { Magic } from "mmmagic";
 import User from "../models/User";
-import Post from "../models/Post";
 
 const UserController = {
   async index(req, res) {
@@ -12,15 +11,14 @@ const UserController = {
         .status(403)
         .json({ msg: "Cannot pass both username and userID." });
     if (req.query.userID) {
-      const posts = await Post.find({ user: req.query.userID }).populate(
-        "user",
-        "name"
-      );
-      return res.json({ posts });
+      const user = await User.findById(req.query.userID)
+        .select("-password -token")
+        .populate("posts");
+      return res.json(user);
     }
     const substr = new RegExp(req.query.username, "i");
-    const users = await User.find({ name: substr });
-    return res.json({ users });
+    const users = await User.find({ name: substr }).select("-password -token");
+    return res.json(users);
   },
   async create(req, res) {
     const username = req.body.username || "";
@@ -41,7 +39,7 @@ const UserController = {
         password: bcrypt.hashSync(password, 10),
       });
       return res.json({
-        id: user._id,
+        _id: user._id,
         name: user.name,
         avatarUri: user.avatarUri,
         postNum: user.postNum,
@@ -61,7 +59,7 @@ const UserController = {
           msg: { password: "Incorrect password." },
         });
       return res.json({
-        id: user[0]._id,
+        _id: user[0]._id,
         name: user[0].name,
         avatarUri: user[0].avatarUri,
         postNum: user[0].postNum,

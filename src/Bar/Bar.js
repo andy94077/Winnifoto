@@ -16,7 +16,6 @@ import {
   FaceRounded,
   MoreVertRounded,
   SearchRounded,
-  AccountCircleRounded,
   PhotoCameraRounded,
 } from "@material-ui/icons";
 import { useSelector } from "react-redux";
@@ -131,6 +130,8 @@ export default function Bar(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const handleGoToProfile = () => history.push(`/profile/${user._id}`);
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -159,9 +160,7 @@ export default function Bar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => history.push(`/profile/${user.id}`)}>
-        Profile
-      </MenuItem>
+      <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
     </Menu>
   );
@@ -177,9 +176,17 @@ export default function Bar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
-      <MenuItem onClick={handleOpenSignUp}>Sign up</MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
+      {user._id === null ? (
+        <>
+          <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
+          <MenuItem onClick={handleOpenSignUp}>Sign up</MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
+          <MenuItem>Sign Out</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -228,7 +235,11 @@ export default function Bar(props) {
                 <Link to="/" className={classes.link}>
                   <IconButton
                     className={classes.tabButton}
-                    color={channel === "findModel" ? "primary" : "default"}
+                    color={
+                      channel === "findModel" && location.pathname === "/"
+                        ? "primary"
+                        : "default"
+                    }
                     onClick={handleTabChange("findModel")}
                   >
                     <FaceRounded />
@@ -237,7 +248,11 @@ export default function Bar(props) {
                 <Link to="/" className={classes.link}>
                   <IconButton
                     className={classes.tabButton}
-                    color={channel === "findSnapper" ? "primary" : "default"}
+                    color={
+                      channel === "findSnapper" && location.pathname === "/"
+                        ? "primary"
+                        : "default"
+                    }
                     onClick={handleTabChange("findSnapper")}
                   >
                     <PhotoCameraRounded />
@@ -262,7 +277,7 @@ export default function Bar(props) {
             </div>
           </div>
           <div className={`${classes.block} ${classes.sectionDesktop}`}>
-            {user.id === null ? (
+            {user._id === null ? (
               <>
                 <Button onClick={handleOpenSignIn}>Sign in</Button>
                 <Button onClick={handleOpenSignUp}>Sign Up</Button>

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    id: null,
+    _id: null,
     name: null,
     avatarUri: null,
     postNum: null,
@@ -11,7 +11,7 @@ export const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state.id = action.payload.id;
+      state._id = action.payload._id;
       state.name = action.payload.name;
       state.avatarUri = action.payload.avatarUri;
       state.postNum = action.payload.postNum;

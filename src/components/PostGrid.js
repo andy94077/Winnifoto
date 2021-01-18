@@ -32,7 +32,7 @@ export default function PostGrid(props) {
       <GridList cellHeight="auto" cols={cols}>
         {posts.map((post) => (
           <PostPreview
-            key={post.id}
+            key={post._id}
             post={post}
             onClick={handleClickPost(post)}
             style={

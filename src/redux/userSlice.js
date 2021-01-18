@@ -10,7 +10,7 @@ export const userSlice = createSlice({
     token: null,
   },
   reducers: {
-    setUser: (state, action) => {
+    setUser(state, action) {
       state._id = action.payload._id;
       state.name = action.payload.name;
       state.avatarUri = action.payload.avatarUri;

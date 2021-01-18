@@ -8,11 +8,11 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
-import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { setUser } from "../redux/userSlice";
 import { SERVER } from "../config";
 import CustomModal from "../components/CustomModal";
+import { setCookie } from "../cookieHelper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn(props) {
   const { open, setOpen } = props;
+  const history = useHistory();
   const classes = useStyles();
-  const dispatch = useDispatch();
   const [signUpUser, setSignUpUser] = useState({ username: "", password: "" });
   const [error, setError] = useState({ error: false, msg: "" });
 
@@ -57,8 +57,8 @@ export default function SignIn(props) {
     try {
       const { data } = await SERVER.post("/user", signUpUser);
       setError({ error: false, msg: "" });
-      dispatch(setUser(data));
-      setOpen(false);
+      setCookie("token", data.token);
+      history.go(0);
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
     }

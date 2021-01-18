@@ -39,13 +39,16 @@ const uploadPost = multer({
   limits: { fileSize: 100000000 },
 });
 
+const multipartFormData = multer();
+
 const router = Router();
 router
   .route("/user")
   .get(UserController.index)
   .post(UserController.create)
   .put(uploadAvatar.single("avatar"), UserController.updateAvatar);
-router.route("/login").post(UserController.login);
+router.post("/login", multipartFormData.any(), UserController.login);
+router.post("/authenticate", UserController.authenticate);
 
 router
   .route("/post")

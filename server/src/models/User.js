@@ -18,10 +18,15 @@ const UserSchema = new Schema({
   },
   token: {
     type: String,
-    required: [true, "token field is required."],
+    default() {
+      return jsonwebtoken.sign(
+        { name: this.name, password: this.password },
+        SECRET
+      );
+    },
   },
   postNum: { type: Number, default: 0 },
-  avatarUri: { type: String, default: "avatars/defaultAvatar.jpg" },
+  avatarUri: { type: String, default: "/avatars/defaultAvatar.jpg" },
 });
 
 UserSchema.plugin(uniqueValidator, {

@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import fs from "fs";
+import path from "path";
 import { Magic } from "mmmagic";
 import User from "../models/User";
 import Post from "../models/Post";
@@ -70,15 +71,26 @@ const UserController = {
     return res.status(403).json({ msg: { username: "Username not found." } });
   },
   async updateAvatar(req, res) {
-    const img = req.body.avatar;
+    console.log("OAO", req.body, req.file);
+    console.log(req.file.destination);
 
-    fs.writeFile("public/avatars/tmpOAO.png", img, "binary", (err) => {
-      if (err) {
-        console.log(err);
-        return res.status(403).json({ msg: "Upload image error" });
-      }
-      return res.json({ msg: "success" });
-    });
+    try {
+      const newPath = `/avatars/${req.body.userID}.jpg`;
+      const post = await User.updateOne(
+        { _id: req.body.userID },
+        { avatar: newPath }
+      );
+      fs.rename(
+        path.join(req.file.destination, req.file.filename),
+        path.join("public", newPath),
+        (err) => {
+          if (err) res.status(403).json(err);
+        }
+      );
+      return res.json({ path: newPath });
+    } catch (err) {
+      return res.status(403).json(err);
+    }
   },
 };
 

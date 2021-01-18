@@ -156,7 +156,7 @@ export default function HomePage(props) {
 
   return (
     <div className={classes.root}>
-      <UploadPost />
+      <UploadPost channel={channel} />
       {posts
         .filter((post) => post.type === channel)
         .map((post) => (

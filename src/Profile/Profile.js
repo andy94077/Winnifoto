@@ -1,12 +1,16 @@
-import React from "react";
-import { makeStyles, Avatar, Typography } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import {
+  makeStyles,
+  Avatar,
+  Typography,
+  CircularProgress,
+} from "@material-ui/core";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 
 import PostGrid from "../components/PostGrid";
-import { selectUser } from "../redux/userSlice";
 import CONCAT_SERVER_URL from "../utils";
+import { SERVER } from "../config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,147 +61,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Profile() {
-  const { userId } = useParams();
-  const user = { id: 0, name: "Yueh", avatarUri: "/images/y.jpg" };
+  const { userID } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [profileUser, setProfileUser] = useState({
+    id: null,
+    name: "",
+    avatarUri: "",
+    posts: [],
+  }); // { id: 0, name: "Yueh", avatarUri: "/images/y.jpg" };
   // const user = useSelector(selectUser);
   const classes = useStyles();
 
-  const posts = [
-    {
-      id: 123,
-      images: ["/images/w.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 789,
-      images: ["/images/i.jpg", "/images/i-2.jpg", "/images/i2.jpg"],
-      type: "normal",
-      time: moment().add(1, "days").subtract(40, "minutes"),
-      location: "Tainan",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days").add(5, "minutes"),
-    },
-    {
-      id: 0,
-      images: ["/images/n.jpg"],
-      type: "normal",
-      time: moment().add(2, "days"),
-      location: "Penghu",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 1,
-      images: ["/images/n2.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 2,
-      images: ["/images/i2.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 3,
-      images: ["/images/f.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 4,
-      images: ["/images/o.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 5,
-      images: ["/images/t.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-    {
-      id: 6,
-      images: ["/images/o2.jpg"],
-      type: "normal",
-      time: moment().add(3, "days"),
-      location: "Taipei",
-      styles: ["style1", "style2"],
-      likesNum: 3,
-      commentsNum: 10,
-      body: "This is the body.",
-      user,
-      createAt: moment().subtract(3, "days"),
-    },
-  ];
+  useEffect(async () => {
+    if (userID === undefined || userID === null) return;
+    try {
+      const { data } = await SERVER.get("/user", { params: { userID } });
+      setProfileUser({
+        ...data,
+        posts: data.posts.map((post) => ({
+          ...post,
+          likesNum: Object.keys(post.likes).length,
+          commentsNum: post.comments.length,
+          time: post.time === "" ? "" : moment(post.time),
+          user: { _id: post.user, name: data.name, avatarUri: data.avatarUri },
+          createAt: moment(post.createAt),
+        })),
+      });
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err.response);
+    }
+  }, [userID]);
 
+  if (isLoading) return <CircularProgress />;
   return (
     <div className={classes.root}>
       <div className={classes.header}>
         <Avatar
-          alt={user.name}
-          src={CONCAT_SERVER_URL(user.avatarUri)}
+          alt={profileUser.name}
+          src={CONCAT_SERVER_URL(profileUser.avatarUri)}
           className={classes.avatar}
         />
         <div style={{ marginTop: 10 }}>
           <Typography variant="h2" gutterBottom className={classes.username}>
-            {user.name}
+            {profileUser.name}
           </Typography>
         </div>
       </div>
       <div className={classes.divider} />
-      <PostGrid posts={posts} />
+      <PostGrid posts={profileUser.posts} />
     </div>
   );
 }

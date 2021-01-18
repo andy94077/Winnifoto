@@ -37,10 +37,10 @@ export default function App() {
         <Route exact path="/home/:searchKey">
           <HomePage channel={channel} />
         </Route>
-        <Route exact path="/post/:postId">
+        <Route exact path="/post/:postID">
           <Post />
         </Route>
-        <Route exact path="/profile/:userId">
+        <Route exact path="/profile/:userID">
           <Profile />
         </Route>
       </Switch>

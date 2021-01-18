@@ -5,11 +5,14 @@ const PostController = {
   async index(req, res) {
     const { postID } = req.query || "";
     if (!postID) {
-      const posts = await Post.find({}).populate("user", "name");
-      return res.json({ posts });
+      const posts = await Post.find({}).populate("user", ["name", "avatarUri"]);
+      return res.json(posts);
     }
-    const post = await Post.findById(postID).populate("user", "name");
-    return res.json({ post });
+    const post = await Post.findById(postID).populate("user", [
+      "name",
+      "avatarUri",
+    ]);
+    return res.json(post);
   },
   async create(req, res) {
     const data = req.body;

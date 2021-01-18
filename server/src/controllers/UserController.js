@@ -76,6 +76,7 @@ const UserController = {
     return res.status(403).json({ msg: { username: "Username not found." } });
   },
   async updateAvatar(req, res) {
+    if (!req.file) return res.status(403).json({ msg: "Avatar is empty" });
     try {
       const newPath = `/avatars/IMG_${req.body.userID}.jpg`;
       await User.updateOne({ _id: req.body.userID }, { avatarUri: newPath });

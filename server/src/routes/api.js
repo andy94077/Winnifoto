@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import UserController from "../controllers/UserController";
 import PostController from "../controllers/PostController";
+import Authentication from "../middleware/middleware";
 
 const storageAvatar = multer.diskStorage({
   destination: "public/avatars/tmp/",
@@ -48,17 +49,30 @@ router
   .route("/user")
   .get(UserController.index)
   .post(UserController.create)
-  .put(uploadAvatar.single("avatar"), UserController.updateAvatar);
+  .put(
+    uploadAvatar.single("avatar"),
+    Authentication.verifyUser,
+    UserController.updateAvatar
+  );
 router.post("/login", multipartFormData.any(), UserController.login);
 router.post("/authenticate", UserController.authenticate);
 
 router
   .route("/post")
   .get(PostController.index)
-  .post(uploadPost.array("images", 10), PostController.create)
-  .put(uploadPost.array("images", 10), PostController.update)
-  .delete(PostController.delete);
-router.put("/post/like", PostController.like);
-router.put("/post/comment", PostController.comment);
+  .post(
+    uploadPost.array("images", 10),
+    Authentication.verifyPost,
+    PostController.create
+  )
+  .put(
+    uploadPost.array("images", 10),
+    Authentication.verifyPost,
+    PostController.update
+  )
+  .delete(Authentication.verifyPost, PostController.delete);
+router.put("/post/like", Authentication.verifyPost, PostController.like);
+router
+  .put("/post/comment", Authentication.verifyPost, PostController.comment);
 
 export default router;

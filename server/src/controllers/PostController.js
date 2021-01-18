@@ -24,9 +24,9 @@ const PostController = {
         .status(403)
         .json({ msg: "Need images field or content field" });
     try {
-      const msg = await Post.create(data);
-      await User.updateOne({ _id: data.user }, { $inc: { postNum: 1 } });
-      return res.json({ msg });
+      const ret = await Post.create(data);
+      await User.updateOne({ _id: data.user }, { $push: { posts: ret._id } });
+      return res.json({ ret });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.type.message });
     }

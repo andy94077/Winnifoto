@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile() {
   const { userId } = useParams();
-  const user = useSelector(selectUser);
+  const user = { id: 0, name: "Yueh", avatarUri: "/images/y.jpg" };
+  // const user = useSelector(selectUser);
   const classes = useStyles();
 
   const posts = [

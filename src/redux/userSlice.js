@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    id: 0,
-    name: "Yueh",
-    avatarUri: "/images/y.jpg",
-    postNum: 0,
-    token: "YuehTOKENOAO",
+    id: null,
+    name: null,
+    avatarUri: null,
+    postNum: null,
+    token: null,
   },
   reducers: {
     setUser: (state, action) => {

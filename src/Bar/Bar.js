@@ -10,6 +10,7 @@ import {
   MenuItem,
   Menu,
   useMediaQuery,
+  Avatar,
 } from "@material-ui/core";
 import {
   FaceRounded,
@@ -23,7 +24,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignIn/SignUp";
-import CustomModal from "../components/CustomModal";
+import CONCAT_SERVER_URL from "../utils";
 import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles((theme) => ({
@@ -161,7 +162,7 @@ export default function Bar(props) {
       <MenuItem onClick={() => history.push(`/profile/${user.id}`)}>
         Profile
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
     </Menu>
   );
 
@@ -177,18 +178,8 @@ export default function Bar(props) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
-      <MenuItem onClick={handleOpenSignUp}>Sign Up</MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircleRounded />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <MenuItem onClick={handleOpenSignUp}>Sign up</MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
     </Menu>
   );
 
@@ -271,18 +262,18 @@ export default function Bar(props) {
             </div>
           </div>
           <div className={`${classes.block} ${classes.sectionDesktop}`}>
-            <Button onClick={handleOpenSignIn}>Sign in</Button>
-            <Button onClick={handleOpenSignUp}>Sign Up</Button>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircleRounded />
-            </IconButton>
+            {user.id === null ? (
+              <>
+                <Button onClick={handleOpenSignIn}>Sign in</Button>
+                <Button onClick={handleOpenSignUp}>Sign Up</Button>
+              </>
+            ) : (
+              <Avatar
+                alt={user.name}
+                src={CONCAT_SERVER_URL(user.avatarUri)}
+                onClick={handleProfileMenuOpen}
+              />
+            )}
           </div>
           <div className={`${classes.block} ${classes.sectionMobile}`}>
             <IconButton
@@ -297,8 +288,8 @@ export default function Bar(props) {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
+      {renderMobileMenu}
       <SignIn open={openSignIn} setOpen={setOpenSignIn} />
       <SignUp open={openSignUp} setOpen={setOpenSignUp} />
       <div className={classes.offset} />

@@ -11,10 +11,15 @@ const UserController = {
         .status(403)
         .json({ msg: "Cannot pass both username and userID." });
     if (req.query.userID) {
-      const user = await User.findById(req.query.userID)
-        .select("-password -token")
-        .populate("posts");
-      return res.json(user);
+      try {
+        const user = await User.findById(req.query.userID)
+          .select("-password -token")
+          .populate("posts");
+        if (user === null) res.status(404).json({ msg: "User Not Found." });
+        return res.json(user);
+      } catch {
+        return res.status(403).json({ msg: "User Not Found." });
+      }
     }
     const substr = new RegExp(req.query.username, "i");
     const users = await User.find({ name: substr }).select("-password -token");
@@ -66,10 +71,6 @@ const UserController = {
         return res.status(403).json({
           msg: { password: "Incorrect password." },
         });
-      // console.log("gogogo");
-      // res.setHeader("Cache-Control", "private");
-      // res.cookie("token", user[0].token, { httpOnly: true });
-      // return res.send("done");
       return res.json({ token: user[0].token });
     }
     return res.status(403).json({ msg: { username: "Username not found." } });
@@ -77,11 +78,8 @@ const UserController = {
   async updateAvatar(req, res) {
     if (!req.file) return res.status(403).json({ msg: "Avatar is empty" });
     try {
-      const newPath = `/avatars/${req.body.userID}.jpg`;
-      const post = await User.updateOne(
-        { _id: req.body.userID },
-        { avatarUri: newPath }
-      );
+      const newPath = `/avatars/IMG_${req.body.userID}.jpg`;
+      await User.updateOne({ _id: req.body.userID }, { avatarUri: newPath });
       fs.renameSync(
         path.join(req.file.destination, req.file.filename),
         path.join("public", newPath),

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+
 import UserController from "../controllers/UserController";
 import PostController from "../controllers/PostController";
 import Authentication from "../middleware/middleware";
@@ -7,7 +9,7 @@ import Authentication from "../middleware/middleware";
 const storageAvatar = multer.diskStorage({
   destination: "public/avatars/tmp/",
   filename: (req, file, cb) => {
-    cb(null, `IMAGE-${Date.now()}.jpg`);
+    cb(null, `IMG_${uuidv4()}.jpg`);
   },
 });
 
@@ -25,7 +27,7 @@ const uploadAvatar = multer({
 const storagePost = multer.diskStorage({
   destination: "public/postImg/tmp",
   filename: (req, file, cb) => {
-    cb(null, `POSTIMG-${Date.now()}.jpg`);
+    cb(null, `IMG_${uuidv4()}.jpg`);
   },
 });
 
@@ -69,9 +71,8 @@ router
     PostController.update
   )
   .delete(Authentication.verifyPost, PostController.delete);
-router.route("/post/like").put(Authentication.verifyPost, PostController.like);
+router.put("/post/like", Authentication.verifyPost, PostController.like);
 router
-  .route("/post/comment")
-  .put(Authentication.verifyPost, PostController.comment);
+  .put("/post/comment", Authentication.verifyPost, PostController.comment);
 
 export default router;

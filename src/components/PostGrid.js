@@ -7,19 +7,13 @@ import { PhotoCameraOutlined } from "@material-ui/icons";
 import PostPreview from "./PostPreview";
 import CustomModal from "./CustomModal";
 import Post from "./Post";
+import ErrorMessage from "./ErrorMessage";
 
 const useStyles = makeStyles({
   cardRoot: { width: "80%" },
   card: {
     top: "40%",
     transform: "translateY(-40%)",
-  },
-  noPosts: {
-    borderRadius: "50%",
-    border: "3px solid black",
-    padding: 13,
-    fontSize: "5em",
-    margin: "20px 0",
   },
 });
 
@@ -36,16 +30,8 @@ export default function PostGrid(props) {
     setOpenModal(true);
   };
 
-  if (posts.length === 0) {
-    return (
-      <div style={{ textAlign: "center" }}>
-        <PhotoCameraOutlined className={classes.noPosts} />
-        <Typography variant="h4" style={{ fontWeight: 300 }}>
-          No Posts Yet
-        </Typography>
-      </div>
-    );
-  }
+  if (posts.length === 0) return <ErrorMessage msg="No Post Yet" />;
+
   return (
     <>
       <GridList cellHeight="auto" cols={cols}>

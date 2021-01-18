@@ -6,11 +6,16 @@ export const userSlice = createSlice({
     id: 0,
     name: "Yueh",
     avatarUri: "/images/y.jpg",
+    postNum: 0,
+    token: "YuehTOKENOAO",
   },
   reducers: {
     setUser: (state, action) => {
-      state.id = action.id;
-      state.name = action.name;
+      state.id = action.payload.id;
+      state.name = action.payload.name;
+      state.avatarUri = action.payload.avatarUri;
+      state.postNum = action.payload.postNum;
+      state.token = action.payload.token;
     },
   },
 });

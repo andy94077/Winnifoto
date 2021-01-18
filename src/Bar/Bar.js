@@ -7,7 +7,6 @@ import {
   Button,
   Typography,
   InputBase,
-  Badge,
   MenuItem,
   Menu,
   useMediaQuery,
@@ -15,13 +14,17 @@ import {
 import {
   FaceRounded,
   MoreVertRounded,
-  NotificationsRounded,
   SearchRounded,
-  MailRounded,
   AccountCircleRounded,
   PhotoCameraRounded,
 } from "@material-ui/icons";
-import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
+
+import SignIn from "../SignIn/SignIn";
+import SignUp from "../SignIn/SignUp";
+import CustomModal from "../components/CustomModal";
+import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles((theme) => ({
   grow: { flexGrow: 1, width: "100%" },
@@ -109,14 +112,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Bar(props) {
   const { channel, setChannel } = props;
+  const user = useSelector(selectUser);
+  const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
   const theme = useTheme();
   const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [openSignIn, setOpenSignIn] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
 
   const handleTabChange = (newChannel) => () => setChannel(newChannel);
+  const handleOpenSignIn = () => setOpenSignIn(true);
+  const handleOpenSignUp = () => setOpenSignUp(true);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -149,7 +158,9 @@ export default function Bar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={() => history.push(`/profile/${user.id}`)}>
+        Profile
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -165,22 +176,8 @@ export default function Bar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailRounded />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsRounded />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+      <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
+      <MenuItem onClick={handleOpenSignUp}>Sign Up</MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -230,7 +227,6 @@ export default function Bar(props) {
                     }
                     startIcon={<PhotoCameraRounded />}
                     onClick={handleTabChange("findSnapper")}
-                    href="/"
                   >
                     Find Snapper
                   </Button>
@@ -275,16 +271,8 @@ export default function Bar(props) {
             </div>
           </div>
           <div className={`${classes.block} ${classes.sectionDesktop}`}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailRounded />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsRounded />
-              </Badge>
-            </IconButton>
+            <Button onClick={handleOpenSignIn}>Sign in</Button>
+            <Button onClick={handleOpenSignUp}>Sign Up</Button>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -311,6 +299,8 @@ export default function Bar(props) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <SignIn open={openSignIn} setOpen={setOpenSignIn} />
+      <SignUp open={openSignUp} setOpen={setOpenSignUp} />
       <div className={classes.offset} />
     </div>
   );

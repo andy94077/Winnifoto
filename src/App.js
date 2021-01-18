@@ -26,6 +26,7 @@ export default function App() {
   const user = useSelector(selectUser);
   const classes = useStyles();
 
+  console.log("user", user);
   return (
     <div className={classes.root}>
       <Bar channel={channel} setChannel={setChannel} />

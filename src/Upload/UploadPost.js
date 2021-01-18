@@ -122,10 +122,13 @@ export default function UploadPost(props) {
   };
 
   const handleSubmit = async () => {
-    const { newStyle, urls, ...data } = post;
+    const { newStyle, urls, images, ...data } = post;
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => formData.append(key, value));
     formData.append("user", user._id);
+    for (const img of post.images) {
+      formData.append("images", img);
+    }
     formData.append("token", user.token);
 
     const config = {
@@ -133,6 +136,7 @@ export default function UploadPost(props) {
         "content-type": "multipart/form-data",
       },
     };
+
     try {
       await SERVER.post("/post", formData, config);
       // history.go(0);

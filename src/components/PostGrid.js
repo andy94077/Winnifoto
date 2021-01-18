@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { GridList } from "@material-ui/core";
+import { GridList, Typography } from "@material-ui/core";
 import { useTheme, makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { PhotoCameraOutlined } from "@material-ui/icons";
+
 import PostPreview from "./PostPreview";
 import CustomModal from "./CustomModal";
 import Post from "./Post";
@@ -11,6 +13,13 @@ const useStyles = makeStyles({
   card: {
     top: "40%",
     transform: "translateY(-40%)",
+  },
+  noPosts: {
+    borderRadius: "50%",
+    border: "3px solid black",
+    padding: 13,
+    fontSize: "5em",
+    margin: "20px 0",
   },
 });
 
@@ -27,6 +36,16 @@ export default function PostGrid(props) {
     setOpenModal(true);
   };
 
+  if (posts.length === 0) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <PhotoCameraOutlined className={classes.noPosts} />
+        <Typography variant="h4" style={{ fontWeight: 300 }}>
+          No Posts Yet
+        </Typography>
+      </div>
+    );
+  }
   return (
     <>
       <GridList cellHeight="auto" cols={cols}>

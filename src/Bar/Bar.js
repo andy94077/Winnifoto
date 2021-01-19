@@ -116,7 +116,9 @@ export default function Bar(props) {
   const { channel, setChannel } = props;
   const user = useSelector(selectUser);
   const { searchKey } = useParams();
-  const [searchValue, setSearchValue] = useState(searchKey);
+  const [searchValue, setSearchValue] = useState(
+    searchKey === undefined ? "" : searchKey
+  );
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();

@@ -109,6 +109,18 @@ export default function Post(props) {
 
   const handleCommentChange = (e) => setNewComment(e.target.value);
 
+  const updatePosts = (data) =>
+    setPosts((pre) => {
+      const newArray = [...pre];
+      const i = newArray.findIndex((item) => item._id === data._id);
+      newArray[i] = {
+        ...data,
+        time: data.time === "" || data.time === null ? "" : moment(data.time),
+        createdAt: moment(data.createdAt),
+      };
+      return newArray;
+    });
+
   const handleLike = async () => {
     try {
       const { data } = await SERVER.put("/post/like", {
@@ -116,16 +128,7 @@ export default function Post(props) {
         token: user.token,
         postID: post._id,
       });
-      setPosts((pre) => {
-        const newArray = [...pre];
-        const i = newArray.findIndex((item) => item._id === data._id);
-        newArray[i] = {
-          ...data,
-          time: data.time === "" || data.time === null ? "" : moment(data.time),
-          createdAt: moment(data.createdAt),
-        };
-        return newArray;
-      });
+      updatePosts(data);
     } catch (err) {
       console.log(err);
     }
@@ -139,16 +142,7 @@ export default function Post(props) {
         postID: post._id,
         comment: newComment,
       });
-      setPosts((pre) => {
-        const newArray = [...pre];
-        const i = newArray.findIndex((item) => item._id === data._id);
-        newArray[i] = {
-          ...data,
-          time: data.time === "" || data.time === null ? "" : moment(data.time),
-          createdAt: moment(data.createdAt),
-        };
-        return newArray;
-      });
+      updatePosts(data);
     } catch (err) {
       console.log(err);
     } finally {

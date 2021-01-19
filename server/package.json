@@ -27,7 +27,7 @@
     "routes:win32": "set SHOW_ROUTES=true && nodemon src/server.js --exec babel-node --trace-warnings",
     "routes:default": "SHOW_ROUTES=true nodemon src/server.js --exec babel-node --trace-warnings",
     "seed": "rm -rf public/postImg/* public/avatars/IMG_* && nodemon src/seed/seeder.js --exec babel-node",
-    "server": "nodemon src/server.js --exec babel-node"
+    "server": "nodemon src/server.js --exec babel-node --trace-warnings"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

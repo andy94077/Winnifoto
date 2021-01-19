@@ -36,6 +36,15 @@ export default function HomePage(props) {
   const [posts, setPosts] = useState([]);
   const classes = useStyles();
 
+  const handleSetPost = (post) => {
+    setPosts((pre) => {
+      const newArray = [...pre];
+      const i = newArray.findIndex((item) => item._id === post._id);
+      newArray[i] = post;
+      return newArray;
+    });
+  };
+
   useEffect(async () => {
     try {
       const { data } = await SERVER.get("/post");
@@ -60,7 +69,13 @@ export default function HomePage(props) {
       {posts
         .filter((post) => post.type === channel)
         .map((post) => (
-          <Post key={post._id} className={classes.post} post={post} />
+          <Post
+            key={post._id}
+            className={classes.post}
+            post={post}
+            // setPost={handleSetPost}
+            setPosts={setPosts}
+          />
         ))}
     </div>
   );

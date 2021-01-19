@@ -17,15 +17,15 @@ const useStyles = makeStyles({
 });
 
 export default function PostGrid(props) {
-  const { posts, cols = 3 } = props;
+  const { posts, setPosts, cols = 3 } = props;
   const classes = useStyles();
   const theme = useTheme();
   const widthMatches = useMediaQuery(theme.breakpoints.up("md"));
   const [openModal, setOpenModal] = useState(false);
-  const [modalContent, setModalContent] = useState({});
+  const [postIdx, setPostIdx] = useState();
 
-  const handleClickPost = (post) => () => {
-    setModalContent(post);
+  const handleClickPost = (i) => () => {
+    setPostIdx(i);
     setOpenModal(true);
   };
 
@@ -34,11 +34,11 @@ export default function PostGrid(props) {
   return (
     <>
       <GridList cellHeight="auto" cols={cols}>
-        {posts.map((post) => (
+        {posts.map((post, i) => (
           <PostPreview
             key={post._id}
             post={post}
-            onClick={handleClickPost(post)}
+            onClick={handleClickPost(i)}
             style={
               widthMatches
                 ? {
@@ -56,7 +56,8 @@ export default function PostGrid(props) {
       </GridList>
       <CustomModal open={openModal} setOpen={setOpenModal}>
         <Post
-          post={modalContent}
+          post={posts[postIdx]}
+          setPosts={setPosts}
           classes={{ root: classes.cardRoot, card: classes.card }}
         />
       </CustomModal>

@@ -14,7 +14,7 @@ const UserController = {
       try {
         const user = await User.findById(req.query.userID)
           .select("-password -token")
-          .populate("posts");
+          .populate({ path: "posts", match: { type: "normal" } });
         if (user === null) res.status(404).json({ msg: "User Not Found." });
         return res.json(user);
       } catch {

@@ -24,6 +24,7 @@ export default function PostGrid(props) {
   const [openModal, setOpenModal] = useState(false);
   const [postIdx, setPostIdx] = useState();
 
+  const handleCloseModal = () => setOpenModal(false);
   const handleClickPost = (i) => () => {
     setPostIdx(i);
     setOpenModal(true);
@@ -59,6 +60,7 @@ export default function PostGrid(props) {
           post={posts[postIdx]}
           setPosts={setPosts}
           classes={{ root: classes.cardRoot, card: classes.card }}
+          onDelete={handleCloseModal}
         />
       </CustomModal>
     </>

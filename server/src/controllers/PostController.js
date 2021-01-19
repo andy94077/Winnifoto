@@ -99,6 +99,9 @@ const PostController = {
     const filter = { _id: data.postID };
     try {
       await Post.deleteOne(filter);
+      fs.rmdirSync(path.join("public", "postImg", data.postID), {
+        recursive: true,
+      });
       return res.json({ msg: "Success" });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });

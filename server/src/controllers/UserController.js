@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
-import { Magic } from "mmmagic";
 import User from "../models/User";
 
 const UserController = {

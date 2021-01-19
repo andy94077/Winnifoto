@@ -9,6 +9,7 @@ import {
 import { AccountCircleOutlined } from "@material-ui/icons";
 import moment from "moment";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import PostGrid from "../components/PostGrid";
 import CONCAT_SERVER_URL from "../utils";
@@ -16,6 +17,7 @@ import { SERVER } from "../config";
 import ErrorMessage from "../components/ErrorMessage";
 import CustomModal from "../components/CustomModal";
 import UploadPost from "../Upload/UploadPost";
+import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile() {
   const { userID } = useParams();
+  const user = useSelector(selectUser);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ error: false, msg: "" });
   const [profileUser, setProfileUser] = useState({
@@ -141,13 +144,16 @@ export default function Profile() {
             <Typography variant="h2" gutterBottom className={classes.username}>
               {profileUser.name}
             </Typography>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleOpenModal(true)}
-            >
-              Upload
-            </Button>
+            {user._id === userID && (
+              <Button
+                style={{ borderRadius: 10 }}
+                color="primary"
+                variant="contained"
+                onClick={handleOpenModal(true)}
+              >
+                Upload
+              </Button>
+            )}
           </div>
         </div>
         <div className={classes.divider} />

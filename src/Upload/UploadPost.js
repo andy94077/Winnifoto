@@ -72,6 +72,19 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     borderRadius: 15,
   },
+  inputInput: { height: "100% !important" },
+  overflowY: { overflowY: "auto !important" },
+  style: {
+    margin: "5px 3px 0 0",
+    height: 30,
+    width: 100,
+    borderRadius: 16,
+  },
+  location: {
+    height: 30,
+    width: 100,
+    borderRadius: 10,
+  },
 }));
 
 export default function UploadPost(props) {
@@ -198,13 +211,7 @@ export default function UploadPost(props) {
                 placeholder="location"
                 value={post.location}
                 onChange={handleChangePost("location")}
-                InputProps={{
-                  style: {
-                    height: 30,
-                    width: 100,
-                    borderRadius: 10,
-                  },
-                }}
+                InputProps={{ className: classes.location }}
               />
             </div>
             {post.styles.map((style, i) => (
@@ -217,14 +224,7 @@ export default function UploadPost(props) {
               />
             ))}
             <TextField
-              InputProps={{
-                style: {
-                  margin: "5px 3px 0 0",
-                  height: 30,
-                  width: 100,
-                  borderRadius: 16,
-                },
-              }}
+              InputProps={{ className: classes.style }}
               variant="outlined"
               placeholder="new style..."
               value={post.newStyle}
@@ -239,9 +239,14 @@ export default function UploadPost(props) {
               fullWidth
               value={post.content}
               onChange={handleChangePost("content")}
-              InputProps={{ style: { padding: 10, height: "100%" } }}
+              InputProps={{
+                classes: {
+                  root: classes.inputInput,
+                  input: `${classes.inputInput} ${classes.overflowY}`,
+                },
+                style: { padding: 10 },
+              }}
               multiline
-              rows={8}
             />
           </CardContent>
           <CardActions className={classes.controls}>

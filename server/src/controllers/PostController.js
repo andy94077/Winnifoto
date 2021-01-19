@@ -117,8 +117,15 @@ const PostController = {
         return res.status(404).json({ msg: "Post Not Found" });
       if (!result.likes.has(data.user)) result.likes.set(data.user, true);
       else result.likes.set(data.user, !result.likes.get(data.user));
-      await Post.updateOne({ _id: data.postID }, { likes: result.likes });
-      return res.json({ msg: "Success" });
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: data.postID },
+        {
+          likes: result.likes,
+          $inc: { likesNum: result.likes.get(data.user) ? 1 : -1 },
+        },
+        { new: true }
+      ).populate("user", ["name", "avatarUri"]);
+      return res.json(updatedPost);
     } catch (err) {
       return res.status(403).json({ msg: err });
     }
@@ -142,6 +149,7 @@ const PostController = {
     try {
       await Post.updateOne(filter, {
         $push: { comments: { name: user.name, content: data.comment } },
+        $inc: { commentsNum: 1 },
       });
       return res.json({ msg: "Success" });
     } catch (err) {

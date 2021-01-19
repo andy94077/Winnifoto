@@ -53,9 +53,21 @@ const PostSchema = new Schema(
       of: Boolean,
       default: {},
     },
+    likesNum: {
+      type: Number,
+      default() {
+        return Array.from(this.likes.values()).filter((item) => item).length;
+      },
+    },
     comments: {
       type: [CommentSchema],
       default: [],
+    },
+    commentsNum: {
+      type: Number,
+      default() {
+        return this.comments.length;
+      },
     },
   },
   { timestamps: true }

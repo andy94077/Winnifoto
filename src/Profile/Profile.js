@@ -67,27 +67,30 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ error: false, msg: "" });
   const [profileUser, setProfileUser] = useState({
-    id: null,
+    _id: null,
     name: "",
     avatarUri: "",
-    posts: [],
   });
+  const [posts, setPosts] = useState([{}]);
   const classes = useStyles();
 
   useEffect(async () => {
     if (userID === undefined || userID === null) return;
     try {
       const { data } = await SERVER.get("/user", { params: { userID } });
-      setProfileUser({
-        ...data,
-        posts: data.posts.map((post) => ({
+      setPosts(
+        data.posts.map((post) => ({
           ...post,
-          likesNum: Object.keys(post.likes).length,
-          commentsNum: post.comments.length,
           time: post.time === "" || post.time === null ? "" : moment(post.time),
           user: { _id: post.user, name: data.name, avatarUri: data.avatarUri },
           createAt: moment(post.createAt),
-        })),
+        }))
+      );
+
+      setProfileUser({
+        _id: data._id,
+        name: data.name,
+        avatarUri: data.avatarUri,
       });
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
@@ -120,7 +123,7 @@ export default function Profile() {
         </div>
       </div>
       <div className={classes.divider} />
-      <PostGrid posts={profileUser.posts} />
+      <PostGrid posts={posts} setPosts={setPosts} />
     </div>
   );
 }

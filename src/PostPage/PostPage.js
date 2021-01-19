@@ -11,17 +11,19 @@ export default function PostPage() {
   const { postID } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ error: false, msg: "" });
-  const [post, setPost] = useState({});
+  const [posts, setPosts] = useState([{}]);
 
   useEffect(async () => {
     if (postID === undefined || postID === null) return;
     try {
       const { data } = await SERVER.get("/post", { params: { postID } });
-      setPost({
-        ...data,
-        time: data.time === "" || data.time === null ? "" : moment(data.time),
-        createAt: moment(data.createAt),
-      });
+      setPosts([
+        {
+          ...data,
+          time: data.time === "" || data.time === null ? "" : moment(data.time),
+          createAt: moment(data.createAt),
+        },
+      ]);
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
     } finally {
@@ -31,5 +33,5 @@ export default function PostPage() {
 
   if (isLoading) return <CircularProgress />;
   if (error.error) return <ErrorMessage msg={error.msg} />;
-  return <Post post={post} />;
+  return <Post post={posts[0]} setPosts={setPosts} />;
 }

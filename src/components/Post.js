@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -129,6 +129,9 @@ export default function Post(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [commentFocus, setCommentFocus] = useState(false);
+
+  const handleCommentFocus = (value) => () => setCommentFocus(value);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleOpenDialog = () => setOpenDialog(true);
@@ -396,9 +399,18 @@ export default function Post(props) {
                   value={newComment}
                   onChange={handleCommentChange}
                   onKeyUp={handleKeyUp}
+                  onFocus={handleCommentFocus(true)}
+                  onBlur={handleCommentFocus(false)}
                 />
                 <IconButton onClick={handleComment}>
-                  <SendRounded color="primary" />
+                  <SendRounded
+                    style={{ transition: "color 0.25s" }}
+                    color={
+                      /^\s*$/.test(newComment) && !commentFocus
+                        ? "default"
+                        : "primary"
+                    }
+                  />
                 </IconButton>
               </div>
             </CardActions>

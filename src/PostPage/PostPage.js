@@ -11,7 +11,6 @@ export default function PostPage() {
   const { postID } = useParams();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
-  const [reload, setReload] = useState(false);
   const [error, setError] = useState({ error: false, msg: "" });
   const [posts, setPosts] = useState([]);
 
@@ -31,7 +30,7 @@ export default function PostPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [reload]);
+  }, []);
 
   if (isLoading) return <CircularProgress />;
   if (error.error) return <ErrorMessage msg={error.msg} />;

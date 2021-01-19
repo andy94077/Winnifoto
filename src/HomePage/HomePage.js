@@ -37,6 +37,16 @@ export default function HomePage(props) {
   const [posts, setPosts] = useState([]);
   const classes = useStyles();
 
+  const onUpload = (data) =>
+    setPosts((pre) => [
+      {
+        ...data,
+        time: data.time === "" || data.time === null ? "" : moment(data.time),
+        createdAt: moment(data.createdAt),
+      },
+      ...pre,
+    ]);
+
   useEffect(async () => {
     try {
       const { data } = await SERVER.get("/post");
@@ -57,7 +67,9 @@ export default function HomePage(props) {
 
   return (
     <div className={classes.root}>
-      {user._id !== null && <UploadPost channel={channel} />}
+      {user._id !== null && (
+        <UploadPost channel={channel} onUpload={onUpload} />
+      )}
       {posts
         .filter((post) => post.type === channel)
         .map((post) => (

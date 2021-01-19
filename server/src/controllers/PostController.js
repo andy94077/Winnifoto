@@ -148,7 +148,7 @@ const PostController = {
     if (!data.postID) {
       return res.status(403).json({ msg: "postID field is required" });
     }
-    if (!data.comment) {
+    if (!data.comment || /^\s*$/.test(data.comment)) {
       return res.status(403).json({ msg: "comment field is required" });
     }
     try {

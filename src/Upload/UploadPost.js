@@ -181,7 +181,6 @@ export default function UploadPost(props) {
         images: [],
       });
       setUploaded(false);
-      console.log(returnData);
       onUpload(returnData);
     } catch (err) {
       console.log(err.response);

@@ -8,6 +8,7 @@ import Post from "../components/Post";
 import UploadPost from "../Upload/UploadPost";
 import { SERVER } from "../config";
 import { selectUser } from "../redux/userSlice";
+import ErrorMessage from "../components/ErrorMessage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,22 +65,36 @@ export default function HomePage(props) {
   }, []);
 
   if (isLoading) return <CircularProgress />;
-
+  const searchKeyDecoded = decodeURIComponent(searchKey);
+  console.log("serach", posts, searchKeyDecoded);
+  const filteredPosts = posts.filter(
+    (post) =>
+      post.type === channel &&
+      (searchKey === undefined ||
+        searchKeyDecoded === "" ||
+        (searchKeyDecoded[0] === "#" &&
+          post.styles.filter((style) =>
+            RegExp(searchKeyDecoded.slice(1), "i").test(style)
+          ).length > 0) ||
+        RegExp(searchKeyDecoded, "i").test(post.user.name))
+  );
   return (
     <div className={classes.root}>
       {user._id !== null && (
         <UploadPost channel={channel} onUpload={onUpload} />
       )}
-      {posts
-        .filter((post) => post.type === channel)
-        .map((post) => (
+      {filteredPosts.length <= 0 ? (
+        <ErrorMessage msg="No Post Found" />
+      ) : (
+        filteredPosts.map((post) => (
           <Post
             key={post._id}
             className={classes.post}
             post={post}
             setPosts={setPosts}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 }

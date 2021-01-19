@@ -41,6 +41,10 @@ const UserController = {
         msg: { password: "password should have length between 4 ~ 32" },
       });
     }
+    if (username.includes("#") || username.includes("/"))
+      return res.status(403).json({
+        msg: { username: "username should not contain # or /" },
+      });
     try {
       const user = await User.create({
         name: username,

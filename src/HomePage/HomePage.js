@@ -66,6 +66,7 @@ export default function HomePage(props) {
 
   if (isLoading) return <CircularProgress />;
   const searchKeyDecoded = decodeURIComponent(searchKey);
+  console.log("serach", posts, searchKeyDecoded);
   const filteredPosts = posts.filter(
     (post) =>
       post.type === channel &&
@@ -74,7 +75,8 @@ export default function HomePage(props) {
         (searchKeyDecoded[0] === "#" &&
           post.styles.filter((style) =>
             RegExp(searchKeyDecoded.slice(1), "i").test(style)
-          ).length > 0))
+          ).length > 0) ||
+        RegExp(searchKeyDecoded, "i").test(post.user.name))
   );
   return (
     <div className={classes.root}>

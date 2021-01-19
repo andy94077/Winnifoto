@@ -19,7 +19,7 @@ import {
   PhotoCameraRounded,
 } from "@material-ui/icons";
 import { useSelector } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 
 import CustomModal from "../components/CustomModal";
 import SignIn from "../SignIn/SignIn";
@@ -115,6 +115,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Bar(props) {
   const { channel, setChannel } = props;
   const user = useSelector(selectUser);
+  const { searchKey } = useParams();
+  const [searchValue, setSearchValue] = useState(searchKey);
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -155,8 +157,8 @@ export default function Bar(props) {
   const handleMobileMenuOpen = (event) =>
     setMobileMoreAnchorEl(event.currentTarget);
 
-  const handleSearch = (searchKey) => {
-    history.push(`/home/${encodeURIComponent(searchKey)}`);
+  const handleSearch = (key) => {
+    history.push(`/home/${encodeURIComponent(key)}`);
   };
 
   const handleKeyUpSearch = (e) => {
@@ -217,11 +219,16 @@ export default function Bar(props) {
 
             {widthMatches ? (
               <>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <Button
                     className={classes.tabButton}
                     color={
-                      channel === "findModel" && location.pathname === "/"
+                      channel === "findModel" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -231,11 +238,16 @@ export default function Bar(props) {
                     Find Model
                   </Button>
                 </Link>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <Button
                     className={classes.tabButton}
                     color={
-                      channel === "findSnapper" && location.pathname === "/"
+                      channel === "findSnapper" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -248,11 +260,16 @@ export default function Bar(props) {
               </>
             ) : (
               <>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <IconButton
                     className={classes.tabButton}
                     color={
-                      channel === "findModel" && location.pathname === "/"
+                      channel === "findModel" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -261,11 +278,16 @@ export default function Bar(props) {
                     <FaceRounded />
                   </IconButton>
                 </Link>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <IconButton
                     className={classes.tabButton}
                     color={
-                      channel === "findSnapper" && location.pathname === "/"
+                      channel === "findSnapper" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -289,6 +311,8 @@ export default function Bar(props) {
                   input: classes.inputInput,
                 }}
                 inputProps={{ "aria-label": "search" }}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
                 onKeyUp={handleKeyUpSearch}
               />
             </div>

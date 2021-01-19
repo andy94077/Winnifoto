@@ -18,8 +18,8 @@ const PostTableSeeder = {
         likes: { [users[1]._id]: true, [users[2]._id]: true },
         content: "This is the body.",
         comments: [
-          { name: "yueh", content: "hihi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[1]._id, content: "hihi" },
+          { user: users[0]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -32,8 +32,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "andy", content: "HAHA" },
+          { user: users[3]._id, content: "hi" },
+          { user: users[0]._id, content: "HAHA" },
         ],
       },
       {
@@ -50,8 +50,8 @@ const PostTableSeeder = {
           [users[3]._id]: true,
         },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[2]._id, content: "hi" },
+          { user: users[1]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -64,9 +64,9 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "chiachia", content: "hihi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[2]._id, content: "hi" },
+          { user: users[4]._id, content: "hihi" },
+          { user: users[3]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -79,8 +79,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[3]._id, content: "hi" },
+          { user: users[0]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -93,8 +93,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[0]._id, content: "hi" },
+          { user: users[1]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -107,8 +107,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[1]._id, content: "hi" },
+          { user: users[4]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -121,8 +121,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[5]._id, content: "hi" },
+          { user: users[5]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -135,8 +135,8 @@ const PostTableSeeder = {
         styles: ["style1", "style2"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[5]._id, content: "hi" },
+          { user: users[1]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -149,8 +149,8 @@ const PostTableSeeder = {
         images: ["/avatars/cat.jpg", "/avatars/dog.jpg"],
         likes: { [users[0]._id]: true, [users[1]._id]: true },
         comments: [
-          { name: "chiachia", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[1]._id, content: "hi" },
+          { user: users[5]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -163,8 +163,8 @@ const PostTableSeeder = {
         images: ["/avatars/cat.jpg", "/avatars/dog.jpg"],
         likes: { [users[3]._id]: true },
         comments: [
-          { name: "andy", content: "hi" },
-          { name: "benson", content: "HAHAHA" },
+          { user: users[0]._id, content: "hi" },
+          { user: users[0]._id, content: "HAHAHA" },
         ],
       },
       {
@@ -181,8 +181,8 @@ const PostTableSeeder = {
           [users[4]._id]: true,
         },
         comments: [
-          { name: "andy", content: "hi" },
-          { name: "chiachia", content: "HAHAHA" },
+          { user: users[3]._id, content: "hi" },
+          { user: users[2]._id, content: "HAHAHA" },
         ],
       },
     ];

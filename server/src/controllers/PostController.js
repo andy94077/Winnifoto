@@ -9,11 +9,11 @@ const PostController = {
     if (!postID) {
       const posts = await Post.find({})
         .sort({ createdAt: -1 })
-        .populate("user", ["name", "avatarUri"]);
+        .populate("user comments.user", ["name", "avatarUri"]);
       return res.json(posts);
     }
     try {
-      const post = await Post.findById(postID).populate("user", [
+      const post = await Post.findById(postID).populate("user comments.user", [
         "name",
         "avatarUri",
       ]);
@@ -58,7 +58,7 @@ const PostController = {
         { _id: ret._id },
         { images: pathList },
         { new: true }
-      ).populate("user", ["name", "avatarUri"]);
+      ).populate("user comments.user", ["name", "avatarUri"]);
 
       return res.json(ret);
     } catch (err) {
@@ -127,7 +127,7 @@ const PostController = {
           $inc: { likesNum: result.likes.get(data.user) ? 1 : -1 },
         },
         { new: true }
-      ).populate("user", ["name", "avatarUri"]);
+      ).populate("user comments.user", ["name", "avatarUri"]);
       return res.json(updatedPost);
     } catch (err) {
       return res.status(403).json({ msg: err });
@@ -157,7 +157,7 @@ const PostController = {
           $inc: { commentsNum: 1 },
         },
         { new: true }
-      ).populate("user", ["name", "avatarUri"]);
+      ).populate("user comments.user", ["name", "avatarUri"]);
       return res.json(updatedPost);
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });

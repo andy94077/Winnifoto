@@ -147,13 +147,11 @@ const PostController = {
     if (!data.comment) {
       return res.status(403).json({ msg: "comment field is required" });
     }
-    const user = await User.findById(data.user);
-    const filter = { _id: data.postID };
     try {
       const updatedPost = await Post.findOneAndUpdate(
-        filter,
+        { _id: data.postID },
         {
-          $push: { comments: { name: user.name, content: data.comment } },
+          $push: { comments: { user: data.user, content: data.comment } },
           $inc: { commentsNum: 1 },
         },
         { new: true }

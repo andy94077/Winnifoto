@@ -7,7 +7,9 @@ const PostController = {
   async index(req, res) {
     const { postID } = req.query || "";
     if (!postID) {
-      const posts = await Post.find({}).populate("user", ["name", "avatarUri"]);
+      const posts = await Post.find({})
+        .sort({ createdAt: -1 })
+        .populate("user", ["name", "avatarUri"]);
       return res.json(posts);
     }
     try {

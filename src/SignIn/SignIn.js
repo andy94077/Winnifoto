@@ -11,7 +11,6 @@ import { LockOutlined } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 
 import { SERVER } from "../config";
-import CustomModal from "../components/CustomModal";
 import { setCookie } from "../cookieHelper";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
-  const { open, setOpen } = props;
+  const { onSubmit = () => {} } = props;
   const history = useHistory();
   const classes = useStyles();
   const [loginUser, setLoginUser] = useState({ username: "", password: "" });
@@ -58,6 +57,7 @@ export default function SignIn(props) {
       const { data } = await SERVER.post("/login", loginUser);
       setError({ error: false, msg: "" });
       setCookie("token", data.token);
+      onSubmit();
       history.go(0);
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
@@ -74,49 +74,47 @@ export default function SignIn(props) {
   };
 
   return (
-    <CustomModal open={open} setOpen={setOpen}>
-      <Paper className={classes.root}>
-        <Avatar className={classes.avatar}>
-          <LockOutlined />
-        </Avatar>
-        <Typography variant="h4">Sign In</Typography>
-        <div className={classes.field}>
-          <TextField
-            className={classes.input}
-            variant="outlined"
-            label="Username"
-            required
-            fullWidth
-            InputProps={{ style: { borderRadius: 15 } }}
-            value={loginUser.username}
-            error={error.error}
-            helperText={error.msg.username}
-            onChange={handleLoginValue("username")}
-          />
-          <TextField
-            className={classes.input}
-            variant="outlined"
-            label="Password"
-            required
-            fullWidth
-            InputProps={{ style: { borderRadius: 15 } }}
-            value={loginUser.password}
-            type="password"
-            error={error.error}
-            helperText={error.msg.password}
-            onChange={handleLoginValue("password")}
-            onKeyUp={handleKeyUp}
-          />
-        </div>
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </Paper>
-    </CustomModal>
+    <Paper className={classes.root}>
+      <Avatar className={classes.avatar}>
+        <LockOutlined />
+      </Avatar>
+      <Typography variant="h4">Sign In</Typography>
+      <div className={classes.field}>
+        <TextField
+          className={classes.input}
+          variant="outlined"
+          label="Username"
+          required
+          fullWidth
+          InputProps={{ style: { borderRadius: 15 } }}
+          value={loginUser.username}
+          error={error.error}
+          helperText={error.msg.username}
+          onChange={handleLoginValue("username")}
+        />
+        <TextField
+          className={classes.input}
+          variant="outlined"
+          label="Password"
+          required
+          fullWidth
+          InputProps={{ style: { borderRadius: 15 } }}
+          value={loginUser.password}
+          type="password"
+          error={error.error}
+          helperText={error.msg.password}
+          onChange={handleLoginValue("password")}
+          onKeyUp={handleKeyUp}
+        />
+      </div>
+      <Button
+        className={classes.button}
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
+    </Paper>
   );
 }

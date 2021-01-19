@@ -52,7 +52,7 @@ export default function HomePage(props) {
         data.map((post) => ({
           ...post,
           time: post.time === "" || post.time === null ? "" : moment(post.time),
-          createAt: moment(post.createAt),
+          createdAt: moment(post.createdAt),
         }))
       );
       setIsLoading(false);

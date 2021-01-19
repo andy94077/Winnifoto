@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadPost(props) {
   const {
     channel,
+    onUpload = () => {},
     className = "",
     classes: classesProps = { root: "", card: "" },
   } = props;
@@ -136,7 +137,7 @@ export default function UploadPost(props) {
     formData.append("token", user.token);
 
     try {
-      await SERVER.post("/post", formData);
+      const { data: returnData } = await SERVER.post("/post", formData);
       setPost({
         type: channel,
         time: "",
@@ -148,6 +149,8 @@ export default function UploadPost(props) {
         images: [],
       });
       setUploaded(false);
+      console.log(returnData);
+      onUpload(returnData);
     } catch (err) {
       console.log(err.response);
     }

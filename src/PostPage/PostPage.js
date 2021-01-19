@@ -21,7 +21,7 @@ export default function PostPage() {
         {
           ...data,
           time: data.time === "" || data.time === null ? "" : moment(data.time),
-          createAt: moment(data.createAt),
+          createdAt: moment(data.createdAt),
         },
       ]);
     } catch (err) {

@@ -100,7 +100,7 @@ export default function Post(props) {
         newArray[i] = {
           ...data,
           time: data.time === "" || data.time === null ? "" : moment(data.time),
-          createAt: moment(data.createAt),
+          createdAt: moment(data.createdAt),
         };
         return newArray;
       });
@@ -146,16 +146,16 @@ export default function Post(props) {
             }
             subheader={
               location.pathname === `/profile/${post._id}` ? (
-                post.createAt - moment().subtract(5, "days") ? (
-                  post.createAt.calendar()
+                post.createdAt - moment().subtract(5, "days") ? (
+                  post.createdAt.calendar()
                 ) : (
-                  post.createAt.fromNow()
+                  post.createdAt.fromNow()
                 )
               ) : (
                 <Link to={`/post/${post._id}`} className={classes.link}>
-                  {post.createAt - moment().subtract(5, "days")
-                    ? post.createAt.calendar()
-                    : post.createAt.fromNow()}
+                  {post.createdAt - moment().subtract(5, "days")
+                    ? post.createdAt.calendar()
+                    : post.createdAt.fromNow()}
                 </Link>
               )
             }

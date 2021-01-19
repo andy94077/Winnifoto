@@ -44,21 +44,22 @@ const PostController = {
         fs.mkdirSync(`public/postImg/${ret._id}/`, (err) => {
           if (err) res.status(403).json({ msg: err });
         });
+      const pathList = [];
       for (const fp of req.files) {
         const newPath = `/postImg/${ret._id}/${fp.filename}`;
 
         fs.renameSync(fp.path, path.join("public", newPath), (err) => {
           if (err) res.status(403).json(err);
         });
-
-        ret = await Post.findOneAndUpdate(
-          { _id: ret._id },
-          {
-            $push: { images: newPath },
-          },
-          { new: true }
-        ).populate("user", ["name", "avatarUri"]);
+        pathList.push(newPath);
       }
+
+      ret = await Post.findOneAndUpdate(
+        { _id: ret._id },
+        { images: pathList },
+        { new: true }
+      ).populate("user", ["name", "avatarUri"]);
+
       return res.json(ret);
     } catch (err) {
       return res.status(403).json({ msg: err });

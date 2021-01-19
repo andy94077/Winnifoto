@@ -20,7 +20,7 @@ const UserController = {
           });
         if (user === null) res.status(404).json({ msg: "User Not Found." });
         return res.json(user);
-      } catch {
+      } catch (err) {
         return res.status(403).json({ msg: "User Not Found." });
       }
     }

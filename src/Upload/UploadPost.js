@@ -90,23 +90,36 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadPost(props) {
   const {
     channel,
+    updatePost,
     onUpload = () => {},
     className = "",
     classes: classesProps = { root: "", card: "" },
   } = props;
   const user = useSelector(selectUser);
   const classes = useStyles();
-  const [uploaded, setUploaded] = useState(false);
-  const [post, setPost] = useState({
-    type: channel,
-    time: "",
-    location: "",
-    newStyle: "",
-    styles: [],
-    content: "",
-    urls: [],
-    images: [],
-  });
+  const [uploaded, setUploaded] = useState(updatePost !== undefined);
+  const [post, setPost] = useState(
+    updatePost === undefined
+      ? {
+          type: channel,
+          time: "",
+          location: "",
+          newStyle: "",
+          styles: [],
+          content: "",
+          urls: [],
+          images: [],
+        }
+      : {
+          ...updatePost,
+          time:
+            updatePost.time === ""
+              ? ""
+              : updatePost.time.format("yyyy-MM-DDThh:mm"),
+          newStyle: "",
+          urls: updatePost.images,
+        }
+  );
 
   const handleUpload = (e) => {
     // console.log(e.target.files);
@@ -138,11 +151,15 @@ export default function UploadPost(props) {
     if (newStyle !== "") styles.push(newStyle);
 
     const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+    ["type", "time", "location", "content"].forEach((key) =>
+      formData.append(key, data[key])
+    );
     formData.append("user", user._id);
-    for (const img of images) {
-      formData.append("images", img);
-    }
+    if (updatePost === undefined) {
+      for (const img of images) {
+        formData.append("images", img);
+      }
+    } else formData.append("postID", post._id);
     for (const style of styles) {
       formData.append("styles", style);
     }
@@ -150,7 +167,9 @@ export default function UploadPost(props) {
     formData.append("token", user.token);
 
     try {
-      const { data: returnData } = await SERVER.post("/post", formData);
+      const { data: returnData } = await (updatePost === undefined
+        ? SERVER.post("/post", formData)
+        : SERVER.put("/post", formData));
       setPost({
         type: channel,
         time: "",
@@ -168,6 +187,12 @@ export default function UploadPost(props) {
       console.log(err.response);
     }
   };
+
+  const handleDeleteStyle = (style) => () =>
+    setPost((pre) => ({
+      ...pre,
+      styles: pre.styles.filter((item) => item !== style),
+    }));
 
   return (
     <div className={`${classes.root} ${className} ${classesProps.root}`}>
@@ -214,13 +239,14 @@ export default function UploadPost(props) {
                 InputProps={{ className: classes.location }}
               />
             </div>
-            {post.styles.map((style, i) => (
+            {post.styles.map((style) => (
               <Chip
                 className={classes.chip}
-                key={`${style}_${i}`}
+                key={style}
                 label={style}
                 color="primary"
                 variant="outlined"
+                onDelete={handleDeleteStyle(style)}
               />
             ))}
             <TextField

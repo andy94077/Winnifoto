@@ -115,6 +115,7 @@ export default function Profile() {
         name: data.name,
         avatarUri: data.avatarUri,
       });
+      setError({ error: false, msg: "" });
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
     } finally {

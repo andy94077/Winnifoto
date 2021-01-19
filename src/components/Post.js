@@ -14,8 +14,16 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
-import { AccessTime, Place, Favorite, SendRounded } from "@material-ui/icons";
+import {
+  AccessTime,
+  Place,
+  Favorite,
+  SendRounded,
+  MoreVert,
+} from "@material-ui/icons";
 import moment from "moment";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -24,6 +32,8 @@ import { selectUser } from "../redux/userSlice";
 import CardImages from "./CardImages";
 import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
+import CustomModal from "./CustomModal";
+import UploadPost from "../Upload/UploadPost";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   content: { paddingTop: 10 },
+  contentText: { whiteSpace: "pre", padding: "0 5px" },
   cover: { flex: 1 },
   controls: {
     display: "flex",
@@ -106,6 +117,17 @@ export default function Post(props) {
   const classes = useStyles();
   const user = useSelector(selectUser);
   const [newComment, setNewComment] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleCommentChange = (e) => setNewComment(e.target.value);
 
@@ -120,6 +142,11 @@ export default function Post(props) {
       };
       return newArray;
     });
+
+  const onUpload = (data) => {
+    updatePosts(data);
+    setOpenModal(false);
+  };
 
   const handleLike = async () => {
     try {
@@ -203,6 +230,39 @@ export default function Post(props) {
                 </Link>
               )
             }
+            action={
+              user._id === post.user._id && (
+                <>
+                  <IconButton size="small" onClick={handleMenuOpen}>
+                    <MoreVert />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    keepMounted
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        handleMenuClose();
+                      }}
+                    >
+                      delete
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleMenuClose();
+                        handleOpenModal();
+                      }}
+                    >
+                      edit
+                    </MenuItem>
+                  </Menu>
+                </>
+              )
+            }
           />
           <div className={classes.contentAndComment}>
             <div style={{ marginLeft: 13 }}>
@@ -236,7 +296,11 @@ export default function Post(props) {
                 ))}
             </div>
             <CardContent className={classes.content}>
-              <Typography variant="subtitle1" color="textSecondary">
+              <Typography
+                className={classes.contentText}
+                variant="subtitle1"
+                color="textSecondary"
+              >
                 {post.content}
               </Typography>
               <List dense>
@@ -308,6 +372,9 @@ export default function Post(props) {
           </CardActions>
         </div>
       </Card>
+      <CustomModal open={openModal} setOpen={setOpenModal}>
+        <UploadPost channel="normal" onUpload={onUpload} updatePost={post} />
+      </CustomModal>
     </div>
   );
 }

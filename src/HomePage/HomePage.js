@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   post: {
     margin: "10px 0",
+    paddingTop: "70%",
   },
 }));
 
@@ -35,15 +36,6 @@ export default function HomePage(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const classes = useStyles();
-
-  const handleSetPost = (post) => {
-    setPosts((pre) => {
-      const newArray = [...pre];
-      const i = newArray.findIndex((item) => item._id === post._id);
-      newArray[i] = post;
-      return newArray;
-    });
-  };
 
   useEffect(async () => {
     try {
@@ -73,7 +65,6 @@ export default function HomePage(props) {
             key={post._id}
             className={classes.post}
             post={post}
-            // setPost={handleSetPost}
             setPosts={setPosts}
           />
         ))}

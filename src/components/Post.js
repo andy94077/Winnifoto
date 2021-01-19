@@ -10,6 +10,10 @@ import {
   CardActions,
   IconButton,
   TextField,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
 } from "@material-ui/core";
 import { AccessTime, Place, Favorite, SendRounded } from "@material-ui/icons";
 import moment from "moment";
@@ -41,11 +45,16 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     borderRadius: 10,
   },
-  header: { paddingBottom: 4 },
   details: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
+  },
+  contentAndComment: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    overflow: "auto",
   },
   content: { paddingTop: 10 },
   cover: { flex: 1 },
@@ -62,6 +71,16 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: { margin: "5px 3px 0 0", height: 30 },
   link: { textDecoration: "none", color: "black" },
+  listItem: {
+    borderRadius: 10,
+    backgroundColor: "#f8f8f8",
+    margin: "3px 0",
+    lineBreak: "anywhere",
+  },
+  listItemText: {
+    flex: "none",
+    marginRight: 5,
+  },
   action: {
     marginTop: "auto",
     flexDirection: "column",
@@ -86,6 +105,9 @@ export default function Post(props) {
   const location = useLocation();
   const classes = useStyles();
   const user = useSelector(selectUser);
+  const [newComment, setNewComment] = useState("");
+
+  const handleCommentChange = (e) => setNewComment(e.target.value);
 
   const handleLike = async () => {
     try {
@@ -109,13 +131,41 @@ export default function Post(props) {
     }
   };
 
+  const handleComment = async () => {
+    try {
+      const { data } = await SERVER.put("/post/comment", {
+        user: user._id,
+        token: user.token,
+        postID: post._id,
+        comment: newComment,
+      });
+      setPosts((pre) => {
+        const newArray = [...pre];
+        const i = newArray.findIndex((item) => item._id === data._id);
+        newArray[i] = {
+          ...data,
+          time: data.time === "" || data.time === null ? "" : moment(data.time),
+          createdAt: moment(data.createdAt),
+        };
+        return newArray;
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setNewComment("");
+    }
+  };
+
+  const handleKeyUp = (e) => {
+    if (e.key === "Enter") handleComment();
+  };
+
   return (
     <div className={`${classes.root} ${className} ${classesParam.root}`}>
       <Card className={`${classes.card} ${classesParam.card}`}>
         <CardImages images={post.images} />
         <div className={classes.details}>
           <CardHeader
-            className={classes.header}
             avatar={
               location.pathname === `/profile/${post.user._id}` ? (
                 <Avatar
@@ -160,14 +210,8 @@ export default function Post(props) {
               )
             }
           />
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ margin: "10px 0 0 13px" }}>
+          <div className={classes.contentAndComment}>
+            <div style={{ marginLeft: 13 }}>
               {Object.prototype.hasOwnProperty.call(post, "time") &&
                 post.time !== "" && (
                   <div className={classes.tag}>
@@ -201,38 +245,73 @@ export default function Post(props) {
               <Typography variant="subtitle1" color="textSecondary">
                 {post.content}
               </Typography>
+              <List dense>
+                {post.comments.map((comment) => (
+                  <ListItem
+                    alignItems="flex-start"
+                    className={classes.listItem}
+                    key={comment._id}
+                  >
+                    <ListItemAvatar>
+                      <Link
+                        className={classes.link}
+                        to={`/profile/${comment.user._id}`}
+                      >
+                        <Avatar
+                          alt={comment.user.name}
+                          src={CONCAT_SERVER_URL(comment.user.avatarUri)}
+                        />
+                      </Link>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Link
+                          className={classes.link}
+                          to={`/profile/${comment.user._id}`}
+                        >
+                          {comment.user.name}
+                        </Link>
+                      }
+                      secondary={comment.content}
+                    />
+                  </ListItem>
+                ))}
+              </List>
             </CardContent>
-            <CardActions className={classes.action} disableSpacing>
-              <div>
-                <IconButton onClick={handleLike}>
-                  <Favorite
-                    style={{
-                      color: post.likes[user._id] ? "red" : "inherit",
-                    }}
-                  />
-                </IconButton>
-                <Typography variant="subtitle2" component="span">
-                  {`${post.likesNum} likes`}
-                </Typography>
-              </div>
-              <div className={classes.commentBlock}>
-                <TextField
-                  className={classes.input}
-                  variant="outlined"
-                  placeholder="write comment..."
-                  InputProps={{
-                    classes: {
-                      root: classes.inputInput,
-                      notchedOutline: classes.inputFieldset,
-                    },
+          </div>
+          <CardActions className={classes.action} disableSpacing>
+            <div>
+              <IconButton onClick={handleLike}>
+                <Favorite
+                  style={{
+                    color: post.likes[user._id] ? "red" : "inherit",
                   }}
                 />
-                <IconButton>
-                  <SendRounded color="primary" />
-                </IconButton>
-              </div>
-            </CardActions>
-          </div>
+              </IconButton>
+              <Typography variant="subtitle2" component="span">
+                {`${post.likesNum} likes`}
+              </Typography>
+            </div>
+            <div className={classes.commentBlock}>
+              <TextField
+                className={classes.input}
+                variant="outlined"
+                placeholder="write comment..."
+                InputProps={{
+                  classes: {
+                    root: classes.inputInput,
+                    notchedOutline: classes.inputFieldset,
+                  },
+                }}
+                value={newComment}
+                onChange={handleCommentChange}
+                onKeyUp={handleKeyUp}
+              />
+              <IconButton onClick={handleComment}>
+                <SendRounded color="primary" />
+              </IconButton>
+            </div>
+          </CardActions>
         </div>
       </Card>
     </div>

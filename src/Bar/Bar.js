@@ -21,6 +21,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 
+import CustomModal from "../components/CustomModal";
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignIn/SignUp";
 import CONCAT_SERVER_URL from "../utils";
@@ -323,8 +324,12 @@ export default function Bar(props) {
       </AppBar>
       {renderMenu}
       {renderMobileMenu}
-      <SignIn open={openSignIn} setOpen={setOpenSignIn} />
-      <SignUp open={openSignUp} setOpen={setOpenSignUp} />
+      <CustomModal open={openSignIn} setOpen={setOpenSignIn}>
+        <SignIn />
+      </CustomModal>
+      <CustomModal open={openSignUp} setOpen={setOpenSignUp}>
+        <SignUp />
+      </CustomModal>
       <div className={classes.offset} />
     </div>
   );

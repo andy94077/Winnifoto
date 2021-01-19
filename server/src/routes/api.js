@@ -62,7 +62,7 @@ router
   .get(PostController.index)
   .post(
     uploadPost.array("images", 10),
-    Authentication.verifyPost,
+    Authentication.verifyUser,
     PostController.create
   )
   .put(

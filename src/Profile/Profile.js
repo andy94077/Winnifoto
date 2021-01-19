@@ -4,6 +4,7 @@ import {
   Avatar,
   Typography,
   CircularProgress,
+  Button,
 } from "@material-ui/core";
 import { AccountCircleOutlined } from "@material-ui/icons";
 import moment from "moment";
@@ -13,6 +14,8 @@ import PostGrid from "../components/PostGrid";
 import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
 import ErrorMessage from "../components/ErrorMessage";
+import CustomModal from "../components/CustomModal";
+import UploadPost from "../Upload/UploadPost";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,7 +75,24 @@ export default function Profile() {
     avatarUri: "",
   });
   const [posts, setPosts] = useState([{}]);
+  const [openModal, setOpenModal] = useState(false);
   const classes = useStyles();
+
+  const handleOpenModal = (isOpen) => () => setOpenModal(isOpen);
+  const onUpload = (newPost) => {
+    setPosts((pre) => [
+      ...pre,
+      {
+        ...newPost,
+        time:
+          newPost.time === "" || newPost.time === null
+            ? ""
+            : moment(newPost.time),
+        createdAt: moment(newPost.createdAt),
+      },
+    ]);
+    setOpenModal(false);
+  };
 
   useEffect(async () => {
     if (userID === undefined || userID === null) return;
@@ -83,7 +103,7 @@ export default function Profile() {
           ...post,
           time: post.time === "" || post.time === null ? "" : moment(post.time),
           user: { _id: post.user, name: data.name, avatarUri: data.avatarUri },
-          createAt: moment(post.createAt),
+          createdAt: moment(post.createdAt),
         }))
       );
 
@@ -109,21 +129,33 @@ export default function Profile() {
       />
     );
   return (
-    <div className={classes.root}>
-      <div className={classes.header}>
-        <Avatar
-          alt={profileUser.name}
-          src={CONCAT_SERVER_URL(profileUser.avatarUri)}
-          className={classes.avatar}
-        />
-        <div style={{ marginTop: 10 }}>
-          <Typography variant="h2" gutterBottom className={classes.username}>
-            {profileUser.name}
-          </Typography>
+    <>
+      <div className={classes.root}>
+        <div className={classes.header}>
+          <Avatar
+            alt={profileUser.name}
+            src={CONCAT_SERVER_URL(profileUser.avatarUri)}
+            className={classes.avatar}
+          />
+          <div style={{ marginTop: 10 }}>
+            <Typography variant="h2" gutterBottom className={classes.username}>
+              {profileUser.name}
+            </Typography>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleOpenModal(true)}
+            >
+              Upload
+            </Button>
+          </div>
         </div>
+        <div className={classes.divider} />
+        <PostGrid posts={posts} setPosts={setPosts} />
       </div>
-      <div className={classes.divider} />
-      <PostGrid posts={posts} setPosts={setPosts} />
-    </div>
+      <CustomModal open={openModal} setOpen={setOpenModal}>
+        <UploadPost channel="normal" onUpload={onUpload} />
+      </CustomModal>
+    </>
   );
 }

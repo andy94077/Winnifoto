@@ -147,11 +147,15 @@ const PostController = {
     const user = await User.findById(data.user);
     const filter = { _id: data.postID };
     try {
-      await Post.updateOne(filter, {
-        $push: { comments: { name: user.name, content: data.comment } },
-        $inc: { commentsNum: 1 },
-      });
-      return res.json({ msg: "Success" });
+      const updatedPost = await Post.findOneAndUpdate(
+        filter,
+        {
+          $push: { comments: { name: user.name, content: data.comment } },
+          $inc: { commentsNum: 1 },
+        },
+        { new: true }
+      ).populate("user", ["name", "avatarUri"]);
+      return res.json(updatedPost);
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
     }

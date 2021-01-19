@@ -77,7 +77,7 @@ export default function Profile() {
     name: "",
     avatarUri: "",
   });
-  const [posts, setPosts] = useState([{}]);
+  const [posts, setPosts] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const classes = useStyles();
 

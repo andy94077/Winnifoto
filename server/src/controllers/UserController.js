@@ -13,7 +13,11 @@ const UserController = {
       try {
         const user = await User.findById(req.query.userID)
           .select("-password -token")
-          .populate({ path: "posts", match: { type: "normal" } });
+          .populate({
+            path: "posts",
+            match: { type: "normal" },
+            populate: { path: "comments.user", select: ["name", "avatarUri"] },
+          });
         if (user === null) res.status(404).json({ msg: "User Not Found." });
         return res.json(user);
       } catch {

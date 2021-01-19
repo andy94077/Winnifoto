@@ -137,13 +137,9 @@ export default function Bar(props) {
     history.go(0);
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleProfileMenuOpen = (event) => setAnchorEl(event.currentTarget);
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -156,8 +152,15 @@ export default function Bar(props) {
     history.push(`/profile/${user._id}`);
   };
 
-  const handleMobileMenuOpen = (event) => {
+  const handleMobileMenuOpen = (event) =>
     setMobileMoreAnchorEl(event.currentTarget);
+
+  const handleSearch = (searchKey) => {
+    history.push(`/home/${encodeURIComponent(searchKey)}`);
+  };
+
+  const handleKeyUpSearch = (e) => {
+    if (e.key === "Enter") handleSearch(e.target.value);
   };
 
   const menuId = "primary-search-account-menu";
@@ -286,6 +289,7 @@ export default function Bar(props) {
                   input: classes.inputInput,
                 }}
                 inputProps={{ "aria-label": "search" }}
+                onKeyUp={handleKeyUpSearch}
               />
             </div>
           </div>

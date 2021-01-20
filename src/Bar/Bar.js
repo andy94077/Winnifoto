@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
@@ -115,7 +116,8 @@ const useStyles = makeStyles((theme) => ({
 function escapeRegExp(text) {
   let newText = text;
   try {
-    const reg = new RegExp(newText);
+    if (newText[0] === "#") new RegExp(newText.slice(1));
+    else new RegExp(newText);
   } catch (e) {
     newText = text.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
   }
@@ -174,7 +176,8 @@ export default function Bar(props) {
   };
 
   const handleKeyUpSearch = (e) => {
-    if (e.key === "Enter") handleSearch(e.target.value);
+    if (e.key === "Enter" && !/^\s*$/.test(e.target.value))
+      handleSearch(e.target.value);
   };
 
   const menuId = "primary-search-account-menu";

@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  makeStyles,
-  Avatar,
-  Typography,
-  CircularProgress,
-  Button,
-} from "@material-ui/core";
+import { makeStyles, Typography, Button } from "@material-ui/core";
 import { AccountCircleOutlined } from "@material-ui/icons";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PostGrid from "../components/PostGrid";
-import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
 import ErrorMessage from "../components/ErrorMessage";
 import CustomModal from "../components/CustomModal";
@@ -53,6 +46,13 @@ const useStyles = makeStyles((theme) => ({
   header: {
     display: "flex",
     paddingTop: 30,
+  },
+  userBlock: {
+    flex: 1,
+    marginTop: 10,
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 0,
+    },
   },
   username: {
     fontSize: 40,
@@ -144,7 +144,7 @@ export default function Profile() {
       <div className={classes.root}>
         <div className={classes.header}>
           <ProfileAvatar user={profileUser} />
-          <div style={{ marginTop: 10 }}>
+          <div className={classes.userBlock}>
             <Typography variant="h2" gutterBottom className={classes.username}>
               {profileUser.name}
             </Typography>

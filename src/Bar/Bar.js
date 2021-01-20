@@ -117,7 +117,7 @@ export default function Bar(props) {
   const user = useSelector(selectUser);
   const { searchKey } = useParams();
   const [searchValue, setSearchValue] = useState(
-    searchKey === undefined ? "" : searchKey
+    searchKey === undefined || searchKey === null ? "" : searchKey
   );
   const history = useHistory();
   const location = useLocation();

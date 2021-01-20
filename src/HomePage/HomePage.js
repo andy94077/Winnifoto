@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Post from "../components/Post";
-import UploadPost from "../Upload/UploadPost";
+import UploadPost from "../Upload/PostUpload";
 import { SERVER } from "../config";
 import { selectUser } from "../redux/userSlice";
 import ErrorMessage from "../components/ErrorMessage";

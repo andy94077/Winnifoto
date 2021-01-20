@@ -9,14 +9,12 @@ import {
 } from "@material-ui/core";
 
 export default function AlertDialog(props) {
-  const { open, setOpen, title, content, actions } = props;
-
-  const handleClose = () => setOpen(false);
+  const { open, onClose, title, content, actions } = props;
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -30,22 +28,11 @@ export default function AlertDialog(props) {
       )}
       <DialogActions>
         {actions === undefined ? (
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={onClose} color="primary" autoFocus>
             OK
           </Button>
         ) : (
-          actions.map((action, i) => (
-            <Button
-              onClick={() => {
-                if (action.action !== undefined) action.action();
-                handleClose();
-              }}
-              color="primary"
-              autoFocus={i === actions.length - 1}
-            >
-              {action.text}
-            </Button>
-          ))
+          actions
         )}
       </DialogActions>
     </Dialog>

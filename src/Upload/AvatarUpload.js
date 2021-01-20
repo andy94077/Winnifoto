@@ -7,20 +7,29 @@ import {
   Paper,
   Slider,
 } from "@material-ui/core";
-import { CloudUploadRounded } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 
-import AlertDialog from "../components/AlertDialog";
 import { SERVER } from "../config";
 import { selectUser } from "../redux/userSlice";
 
 const useStyles = makeStyles({
   root: {
     width: "100%",
+    minWidth: 350,
     borderRadius: 10,
     textAlign: "center",
   },
+  editorBlock: {
+    position: "relative",
+    paddingTop: "100%",
+    width: "100%",
+    height: 0,
+    marginBottom: 6,
+  },
   editor: {
+    position: "absolute",
+    top: 0,
+    left: 0,
     borderTopLeftRadius: "inherit",
     borderTopRightRadius: "inherit",
   },
@@ -46,7 +55,11 @@ export default function AvatarUpload(props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [zoom, setZoom] = useState(1.0);
-  const editorRef = useRef();
+  let editorRef = useRef();
+
+  const setRef = (ref) => {
+    editorRef = ref;
+  };
 
   const handleZoomChange = (_e, newValue) => setZoom(newValue);
 
@@ -54,7 +67,10 @@ export default function AvatarUpload(props) {
     const formData = new FormData();
     formData.append("user", user._id);
     formData.append("token", user.token);
-    formData.append("avatar", uploadFile);
+    const blob = await new Promise((resolve) =>
+      editorRef.getImageScaledToCanvas().toBlob(resolve)
+    );
+    formData.append("avatar", blob);
 
     setIsLoading(true);
     try {
@@ -67,19 +83,21 @@ export default function AvatarUpload(props) {
     }
   };
 
-  const paperWidth = 500;
   return (
-    <Paper className={classes.root} style={{ maxWidth: paperWidth }}>
-      <AvatarEditor
-        className={classes.editor}
-        ref={editorRef}
-        width={300}
-        height={300}
-        borderRadius={300 / 2}
-        scale={zoom}
-        image={uploadFile}
-        style={{ width: paperWidth, height: paperWidth }}
-      />
+    <Paper className={classes.root} style={{ maxWidth: 500 }}>
+      <div className={classes.editorBlock}>
+        <AvatarEditor
+          className={classes.editor}
+          ref={setRef}
+          width={300}
+          height={300}
+          borderRadius={300 / 2}
+          scale={zoom}
+          image={uploadFile}
+          // use in-place style to replace default in-place values
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
       <div className={classes.sliderBlock}>
         <span>Zoom:</span>
         <Slider
@@ -95,7 +113,7 @@ export default function AvatarUpload(props) {
         className={classes.submitButton}
         color="primary"
         onClick={handleSubmit}
-        endIcon={isLoading && <CircularProgress />}
+        endIcon={isLoading && <CircularProgress size={20} />}
         disabled={isLoading}
       >
         Submit

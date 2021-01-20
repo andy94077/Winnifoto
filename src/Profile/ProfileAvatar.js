@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  Avatar,
-  GridListTileBar,
-  makeStyles,
-  IconButton,
-} from "@material-ui/core";
+import React, { useState, useRef } from "react";
+import { Avatar, makeStyles, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -60,10 +55,14 @@ export default function ProfileAvatar(props) {
 
   const [openModal, setOpenModal] = useState(false);
   const [uploadFile, setUploadFile] = useState();
+  const inputRef = useRef(null);
+
+  const clearUploadFile = () => setUploadFile(undefined);
 
   const handleUpload = (e) => {
     if (e.target.files[0] !== undefined) {
       setUploadFile(e.target.files[0]);
+      e.target.value = null;
       setOpenModal(true);
     }
   };
@@ -71,6 +70,7 @@ export default function ProfileAvatar(props) {
   const onUpload = (path) => {
     dispatch(setAvatarUri(path));
     setOpenModal(false);
+    setUploadFile(undefined);
   };
 
   if (user.name === profileUser.name) {
@@ -88,6 +88,7 @@ export default function ProfileAvatar(props) {
           >
             <input
               id="upload-avatar"
+              ref={inputRef}
               onChange={handleUpload}
               type="file"
               accept="image/*"
@@ -98,7 +99,11 @@ export default function ProfileAvatar(props) {
             </IconButton>
           </label>
         </div>
-        <CustomModal open={openModal} setOpen={setOpenModal}>
+        <CustomModal
+          open={openModal}
+          setOpen={setOpenModal}
+          onClose={clearUploadFile}
+        >
           <AvatarUpload uploadFile={uploadFile} onUpload={onUpload} />
         </CustomModal>
       </>

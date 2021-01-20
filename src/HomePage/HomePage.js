@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Post from "../components/Post";
-import UploadPost from "../Upload/UploadPost";
+import UploadPost from "../Upload/PostUpload";
 import { SERVER } from "../config";
 import { selectUser } from "../redux/userSlice";
 import ErrorMessage from "../components/ErrorMessage";
@@ -66,7 +66,6 @@ export default function HomePage(props) {
 
   if (isLoading) return <CircularProgress />;
   const searchKeyDecoded = decodeURIComponent(searchKey);
-  console.log("serach", posts, searchKeyDecoded);
   const filteredPosts = posts.filter(
     (post) =>
       post.type === channel &&

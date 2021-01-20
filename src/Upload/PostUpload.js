@@ -44,9 +44,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     overflow: "auto",
   },
+  tagAndContent: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    overflow: "auto",
+  },
   content: {
     flex: "1 0 auto",
     padding: 10,
+    "&:last-child": { paddingBottom: "initial" },
   },
   uploadBlock: {
     display: "flex",
@@ -66,14 +73,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     marginBottom: 5,
   },
-  chip: { margin: "5px 3px 0 0", height: 30 },
+  chip: {
+    margin: "5px 3px 0 0",
+    height: 30,
+    maxWidth: "99%",
+  },
   button: {
     width: 130,
     height: 40,
     borderRadius: 15,
   },
-  inputInput: { height: "100% !important" },
-  overflowY: { overflowY: "auto !important" },
+  inputRoot: {
+    height: "100% !important",
+    padding: 10,
+    mixHeight: 200,
+  },
+  inputInput: {
+    height: "100% !important",
+    overflowY: "auto !important",
+  },
   style: {
     margin: "5px 3px 0 0",
     height: 30,
@@ -137,7 +155,7 @@ export default function UploadPost(props) {
     setPost((pre) => ({ ...pre, [field]: e.target.value }));
 
   const handleAddStyle = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !/^\s*$/.test(e.target.value)) {
       setPost((pre) => ({
         ...pre,
         styles: [...pre.styles, pre.newStyle],
@@ -203,7 +221,6 @@ export default function UploadPost(props) {
             <label htmlFor="upload-post">
               <input
                 id="upload-post"
-                value={post.files}
                 onChange={handleUpload}
                 type="file"
                 accept="image/*"
@@ -217,63 +234,64 @@ export default function UploadPost(props) {
           </div>
         )}
         <div className={classes.details}>
-          <div style={{ margin: "10px 0 0 13px" }}>
-            <div className={classes.tag}>
-              <AccessTime color="primary" style={{ marginRight: "0.5em" }} />
+          <div className={classes.tagAndContent}>
+            <div style={{ margin: "10px 0 0 13px" }}>
+              <div className={classes.tag}>
+                <AccessTime color="primary" style={{ marginRight: "0.5em" }} />
+                <TextField
+                  label="time"
+                  type="datetime-local"
+                  InputLabelProps={{ shrink: true }}
+                  value={post.time}
+                  onChange={handleChangePost("time")}
+                />
+              </div>
+              <div className={classes.tag}>
+                <Place color="primary" style={{ marginRight: "0.5em" }} />
+                <TextField
+                  variant="outlined"
+                  placeholder="location"
+                  value={post.location}
+                  onChange={handleChangePost("location")}
+                  InputProps={{ className: classes.location }}
+                />
+              </div>
+              {post.styles.map((style) => (
+                <Chip
+                  className={classes.chip}
+                  key={style}
+                  label={style}
+                  color="primary"
+                  variant="outlined"
+                  onDelete={handleDeleteStyle(style)}
+                />
+              ))}
               <TextField
-                label="time"
-                type="datetime-local"
-                InputLabelProps={{ shrink: true }}
-                value={post.time}
-                onChange={handleChangePost("time")}
+                InputProps={{ className: classes.style }}
+                variant="outlined"
+                placeholder="new style..."
+                value={post.newStyle}
+                onChange={handleChangePost("newStyle")}
+                onKeyUp={handleAddStyle}
               />
             </div>
-            <div className={classes.tag}>
-              <Place color="primary" style={{ marginRight: "0.5em" }} />
+            <CardContent className={classes.content}>
               <TextField
+                style={{ height: "100%" }}
                 variant="outlined"
-                placeholder="location"
-                value={post.location}
-                onChange={handleChangePost("location")}
-                InputProps={{ className: classes.location }}
+                fullWidth
+                value={post.content}
+                onChange={handleChangePost("content")}
+                InputProps={{
+                  classes: {
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  },
+                }}
+                multiline
               />
-            </div>
-            {post.styles.map((style) => (
-              <Chip
-                className={classes.chip}
-                key={style}
-                label={style}
-                color="primary"
-                variant="outlined"
-                onDelete={handleDeleteStyle(style)}
-              />
-            ))}
-            <TextField
-              InputProps={{ className: classes.style }}
-              variant="outlined"
-              placeholder="new style..."
-              value={post.newStyle}
-              onChange={handleChangePost("newStyle")}
-              onKeyUp={handleAddStyle}
-            />
+            </CardContent>
           </div>
-          <CardContent className={classes.content}>
-            <TextField
-              style={{ height: "100%" }}
-              variant="outlined"
-              fullWidth
-              value={post.content}
-              onChange={handleChangePost("content")}
-              InputProps={{
-                classes: {
-                  root: classes.inputInput,
-                  input: `${classes.inputInput} ${classes.overflowY}`,
-                },
-                style: { padding: 10 },
-              }}
-              multiline
-            />
-          </CardContent>
           <CardActions className={classes.controls}>
             <Button
               className={classes.button}

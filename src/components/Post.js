@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
+  Button,
   Card,
   CardContent,
   Chip,
@@ -33,7 +34,7 @@ import CardImages from "./CardImages";
 import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
 import CustomModal from "./CustomModal";
-import UploadPost from "../Upload/UploadPost";
+import UploadPost from "../Upload/PostUpload";
 import AlertDialog from "./AlertDialog";
 import ErrorMessage from "./ErrorMessage";
 
@@ -82,7 +83,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     marginBottom: 5,
   },
-  chip: { margin: "5px 3px 0 0", height: 30 },
+  chip: {
+    margin: "5px 3px 0 0",
+    height: 30,
+    maxWidth: "99%",
+  },
   link: { textDecoration: "none", color: "black" },
   listItem: {
     borderRadius: 10,
@@ -96,8 +101,7 @@ const useStyles = makeStyles((theme) => ({
   },
   action: {
     marginTop: "auto",
-    flexDirection: "column",
-    alignItems: "flex-start",
+    display: "block",
   },
   commentBlock: { display: "flex", alignItems: "center", width: "100%" },
   input: { height: 40, flex: 1 },
@@ -119,7 +123,7 @@ export default function Post(props) {
     setPosts,
     onDelete = () => {},
     className = "",
-    classes: classesParam = { root: "", card: "" },
+    classes: classesProps = { root: "", card: "" },
   } = props;
   const location = useLocation();
   const classes = useStyles();
@@ -133,13 +137,10 @@ export default function Post(props) {
 
   const handleCommentFocus = (value) => () => setCommentFocus(value);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleOpenDialog = () => setOpenDialog(true);
+  const handleSetDialog = (open) => () => setOpenDialog(open);
   const handleMenuClose = () => setAnchorEl(null);
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 
   const handleCommentChange = (e) => setNewComment(e.target.value);
 
@@ -213,8 +214,8 @@ export default function Post(props) {
   if (deleted) return <ErrorMessage msg="Post Is Deleted" />;
   return (
     <>
-      <div className={`${classes.root} ${className} ${classesParam.root}`}>
-        <Card className={`${classes.card} ${classesParam.card}`}>
+      <div className={`${classes.root} ${className} ${classesProps.root}`}>
+        <Card className={`${classes.card} ${classesProps.card}`}>
           <CardImages images={post.images} />
           <div className={classes.details}>
             <CardHeader
@@ -281,7 +282,7 @@ export default function Post(props) {
                       <MenuItem
                         onClick={() => {
                           handleMenuClose();
-                          handleOpenModal();
+                          setOpenModal(true);
                         }}
                       >
                         edit
@@ -289,7 +290,7 @@ export default function Post(props) {
                       <MenuItem
                         onClick={() => {
                           handleMenuClose();
-                          handleOpenDialog();
+                          setOpenDialog(true);
                         }}
                       >
                         delete
@@ -427,10 +428,23 @@ export default function Post(props) {
       </CustomModal>
       <AlertDialog
         open={openDialog}
-        setOpen={setOpenDialog}
+        onClose={handleSetDialog(false)}
         title="Do you want to delete this post?"
         content="This action cannot undo."
-        actions={[{ action: handleDeletePost, text: "yes" }, { text: "no" }]}
+        actions={[
+          <Button
+            onClick={() => {
+              handleDeletePost();
+              setOpenDialog(false);
+            }}
+            color="primary"
+          >
+            yes
+          </Button>,
+          <Button onClick={handleSetDialog(false)} color="primary">
+            no
+          </Button>,
+        ]}
       />
     </>
   );

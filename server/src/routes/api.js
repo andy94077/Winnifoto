@@ -51,7 +51,7 @@ router
   .post(UserController.create)
   .put(
     uploadAvatar.single("avatar"),
-    Authentication.verifyUserID,
+    Authentication.verifyUser,
     UserController.updateAvatar
   );
 router.post("/login", multipartFormData.any(), UserController.login);

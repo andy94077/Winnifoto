@@ -256,16 +256,18 @@ export default function UploadPost(props) {
                 InputProps={{ className: classes.location }}
               />
             </div>
-            {post.styles.map((style) => (
-              <Chip
-                className={classes.chip}
-                key={style}
-                label={style}
-                color="primary"
-                variant="outlined"
-                onDelete={handleDeleteStyle(style)}
-              />
-            ))}
+            <div>
+              {post.styles.map((style) => (
+                <Chip
+                  className={classes.chip}
+                  key={style}
+                  label={style}
+                  color="primary"
+                  variant="outlined"
+                  onDelete={handleDeleteStyle(style)}
+                />
+              ))}
+            </div>
             <TextField
               InputProps={{ className: classes.style }}
               variant="outlined"

@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
@@ -112,6 +113,17 @@ const useStyles = makeStyles((theme) => ({
   offset: theme.mixins.toolbar,
 }));
 
+function escapeRegExp(text) {
+  let newText = text;
+  try {
+    if (newText[0] === "#") new RegExp(newText.slice(1));
+    else new RegExp(newText);
+  } catch (e) {
+    newText = text.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+  }
+  return newText.replace(/\\/g, "%5C");
+}
+
 export default function Bar(props) {
   const { channel, setChannel } = props;
   const user = useSelector(selectUser);
@@ -160,11 +172,12 @@ export default function Bar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
 
   const handleSearch = (key) => {
-    history.push(`/home/${encodeURIComponent(key)}`);
+    history.push(`/home/${encodeURIComponent(escapeRegExp(key))}`);
   };
 
   const handleKeyUpSearch = (e) => {
-    if (e.key === "Enter") handleSearch(e.target.value);
+    if (e.key === "Enter" && !/^\s*$/.test(e.target.value))
+      handleSearch(e.target.value);
   };
 
   const menuId = "primary-search-account-menu";

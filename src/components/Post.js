@@ -434,6 +434,7 @@ export default function Post(props) {
         content="This action cannot undo."
         actions={[
           <Button
+            key="yes"
             onClick={() => {
               handleDeletePost();
               setOpenDialog(false);
@@ -442,7 +443,7 @@ export default function Post(props) {
           >
             yes
           </Button>,
-          <Button onClick={handleSetDialog(false)} color="primary">
+          <Button key="no" onClick={handleSetDialog(false)} color="primary">
             no
           </Button>,
         ]}

@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   content: { paddingTop: 10 },
-  contentText: { whiteSpace: "pre", padding: "0 5px" },
+  contentText: { whiteSpace: "pre-wrap", padding: "0 5px" },
   cover: { flex: 1 },
   controls: {
     display: "flex",

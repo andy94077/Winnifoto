@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: "flex",
     flexDirection: "column",
+    overflow: "auto",
   },
   contentAndComment: {
     flex: 1,
@@ -301,7 +302,7 @@ export default function Post(props) {
               }
             />
             <div className={classes.contentAndComment}>
-              <div style={{ marginLeft: 13 }}>
+              <div style={{ margin: "0 10px 0 13px" }}>
                 {Object.prototype.hasOwnProperty.call(post, "time") &&
                   post.time !== "" && (
                     <div className={classes.tag}>

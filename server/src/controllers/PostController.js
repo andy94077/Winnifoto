@@ -30,10 +30,8 @@ const PostController = {
       return res.status(403).json({ msg: "user field is required" });
     if (!data.type)
       return res.status(403).json({ msg: "type field is required" });
-    if (req.files.length === 0 && !data.content) {
-      return res
-        .status(403)
-        .json({ msg: "Need images field or content field" });
+    if (req.files.length === 0) {
+      return res.status(403).json({ msg: "Need images field" });
     }
     // return res.json({ msg: "Still testing" });
     try {

@@ -112,6 +112,16 @@ const useStyles = makeStyles((theme) => ({
   offset: theme.mixins.toolbar,
 }));
 
+function escapeRegExp(text) {
+  let newText = text;
+  try {
+    const reg = new RegExp(newText);
+  } catch (e) {
+    newText = text.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+  }
+  return newText.replace(/\\/g, "%5C");
+}
+
 export default function Bar(props) {
   const { channel, setChannel } = props;
   const user = useSelector(selectUser);
@@ -160,7 +170,7 @@ export default function Bar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
 
   const handleSearch = (key) => {
-    history.push(`/home/${encodeURIComponent(key)}`);
+    history.push(`/home/${encodeURIComponent(escapeRegExp(key))}`);
   };
 
   const handleKeyUpSearch = (e) => {

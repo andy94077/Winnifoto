@@ -221,7 +221,6 @@ export default function UploadPost(props) {
             <label htmlFor="upload-post">
               <input
                 id="upload-post"
-                value={post.files}
                 onChange={handleUpload}
                 type="file"
                 accept="image/*"

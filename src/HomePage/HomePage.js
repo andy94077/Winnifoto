@@ -66,7 +66,6 @@ export default function HomePage(props) {
 
   if (isLoading) return <CircularProgress />;
   const searchKeyDecoded = decodeURIComponent(searchKey);
-  console.log("serach", posts, searchKeyDecoded);
   const filteredPosts = posts.filter(
     (post) =>
       post.type === channel &&

@@ -194,17 +194,23 @@ export default function Bar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {user._id === null ? (
-        <>
-          <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
-          <MenuItem onClick={handleOpenSignUp}>Sign up</MenuItem>
-        </>
-      ) : (
-        <>
-          <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
-          <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
-        </>
-      )}
+      {user._id === null
+        ? [
+            <MenuItem onClick={handleOpenSignIn} key="sign in">
+              Sign in
+            </MenuItem>,
+            <MenuItem onClick={handleOpenSignUp} key="sign up">
+              Sign up
+            </MenuItem>,
+          ]
+        : [
+            <MenuItem onClick={handleGoToProfile} key="profile">
+              Profile
+            </MenuItem>,
+            <MenuItem onClick={handleSignOut} key="sign up">
+              Sign Out
+            </MenuItem>,
+          ]}
     </Menu>
   );
 

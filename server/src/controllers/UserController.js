@@ -20,7 +20,7 @@ const UserController = {
           });
         if (user === null) res.status(404).json({ msg: "User Not Found." });
         return res.json(user);
-      } catch {
+      } catch (err) {
         return res.status(403).json({ msg: "User Not Found." });
       }
     }
@@ -41,6 +41,10 @@ const UserController = {
         msg: { password: "password should have length between 4 ~ 32" },
       });
     }
+    if (username.includes("#") || username.includes("/"))
+      return res.status(403).json({
+        msg: { username: "username should not contain # or /" },
+      });
     try {
       const user = await User.create({
         name: username,
@@ -81,8 +85,8 @@ const UserController = {
   async updateAvatar(req, res) {
     if (!req.file) return res.status(403).json({ msg: "Avatar is empty" });
     try {
-      const newPath = `/avatars/IMG_${req.body.userID}.jpg`;
-      await User.updateOne({ _id: req.body.userID }, { avatarUri: newPath });
+      const newPath = path.join("/avatars", `IMG_${req.body.user}.jpg`);
+      await User.updateOne({ _id: req.body.user }, { avatarUri: newPath });
       fs.renameSync(
         path.join(req.file.destination, req.file.filename),
         path.join("public", newPath),
@@ -90,7 +94,7 @@ const UserController = {
           if (err) res.status(403).json(err);
         }
       );
-      return res.json({ path: newPath });
+      return res.json(`${newPath}?${Date.now()}`);
     } catch (err) {
       return res.status(403).json(err);
     }

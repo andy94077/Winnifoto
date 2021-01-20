@@ -19,7 +19,7 @@ import {
   PhotoCameraRounded,
 } from "@material-ui/icons";
 import { useSelector } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 
 import CustomModal from "../components/CustomModal";
 import SignIn from "../SignIn/SignIn";
@@ -115,6 +115,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Bar(props) {
   const { channel, setChannel } = props;
   const user = useSelector(selectUser);
+  const { searchKey } = useParams();
+  const [searchValue, setSearchValue] = useState(
+    searchKey === undefined || searchKey === null ? "" : searchKey
+  );
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -137,13 +141,9 @@ export default function Bar(props) {
     history.go(0);
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleProfileMenuOpen = (event) => setAnchorEl(event.currentTarget);
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -156,8 +156,15 @@ export default function Bar(props) {
     history.push(`/profile/${user._id}`);
   };
 
-  const handleMobileMenuOpen = (event) => {
+  const handleMobileMenuOpen = (event) =>
     setMobileMoreAnchorEl(event.currentTarget);
+
+  const handleSearch = (key) => {
+    history.push(`/home/${encodeURIComponent(key)}`);
+  };
+
+  const handleKeyUpSearch = (e) => {
+    if (e.key === "Enter") handleSearch(e.target.value);
   };
 
   const menuId = "primary-search-account-menu";
@@ -187,17 +194,23 @@ export default function Bar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {user._id === null ? (
-        <>
-          <MenuItem onClick={handleOpenSignIn}>Sign in</MenuItem>
-          <MenuItem onClick={handleOpenSignUp}>Sign up</MenuItem>
-        </>
-      ) : (
-        <>
-          <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
-          <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
-        </>
-      )}
+      {user._id === null
+        ? [
+            <MenuItem onClick={handleOpenSignIn} key="sign in">
+              Sign in
+            </MenuItem>,
+            <MenuItem onClick={handleOpenSignUp} key="sign up">
+              Sign up
+            </MenuItem>,
+          ]
+        : [
+            <MenuItem onClick={handleGoToProfile} key="profile">
+              Profile
+            </MenuItem>,
+            <MenuItem onClick={handleSignOut} key="sign up">
+              Sign Out
+            </MenuItem>,
+          ]}
     </Menu>
   );
 
@@ -214,11 +227,16 @@ export default function Bar(props) {
 
             {widthMatches ? (
               <>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <Button
                     className={classes.tabButton}
                     color={
-                      channel === "findModel" && location.pathname === "/"
+                      channel === "findModel" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -228,11 +246,16 @@ export default function Bar(props) {
                     Find Model
                   </Button>
                 </Link>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <Button
                     className={classes.tabButton}
                     color={
-                      channel === "findSnapper" && location.pathname === "/"
+                      channel === "findSnapper" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -245,11 +268,16 @@ export default function Bar(props) {
               </>
             ) : (
               <>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <IconButton
                     className={classes.tabButton}
                     color={
-                      channel === "findModel" && location.pathname === "/"
+                      channel === "findModel" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -258,11 +286,16 @@ export default function Bar(props) {
                     <FaceRounded />
                   </IconButton>
                 </Link>
-                <Link to="/" className={classes.link}>
+                <Link
+                  to={`/home/${encodeURIComponent(searchValue)}`}
+                  className={classes.link}
+                >
                   <IconButton
                     className={classes.tabButton}
                     color={
-                      channel === "findSnapper" && location.pathname === "/"
+                      channel === "findSnapper" &&
+                      (location.pathname === "/" ||
+                        location.pathname.startsWith("/home"))
                         ? "primary"
                         : "default"
                     }
@@ -286,6 +319,9 @@ export default function Bar(props) {
                   input: classes.inputInput,
                 }}
                 inputProps={{ "aria-label": "search" }}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyUp={handleKeyUpSearch}
               />
             </div>
           </div>

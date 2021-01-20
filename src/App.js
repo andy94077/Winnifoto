@@ -44,6 +44,9 @@ export default function App() {
         <Route exact path="/">
           <HomePage channel={channel} />
         </Route>
+        <Route exact path="/home">
+          <HomePage channel={channel} />
+        </Route>
         <Route exact path="/home/:searchKey">
           <HomePage channel={channel} />
         </Route>

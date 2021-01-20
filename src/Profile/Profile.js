@@ -16,8 +16,10 @@ import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
 import ErrorMessage from "../components/ErrorMessage";
 import CustomModal from "../components/CustomModal";
-import UploadPost from "../Upload/UploadPost";
+import UploadPost from "../Upload/PostUpload";
 import { selectUser } from "../redux/userSlice";
+import Loading from "../components/Loading";
+import ProfileAvatar from "./ProfileAvatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +66,11 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     border: "1px solid #ddd",
     margin: "10px 0 8px",
+  },
+  cardRoot: { width: "80%" },
+  card: {
+    top: "40%",
+    transform: "translateY(-40%)",
   },
 }));
 
@@ -115,6 +122,7 @@ export default function Profile() {
         name: data.name,
         avatarUri: data.avatarUri,
       });
+      setError({ error: false, msg: "" });
     } catch (err) {
       setError({ error: true, msg: err.response.data.msg });
     } finally {
@@ -122,7 +130,7 @@ export default function Profile() {
     }
   }, [userID]);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <Loading />;
   if (error.error)
     return (
       <ErrorMessage
@@ -135,11 +143,7 @@ export default function Profile() {
     <>
       <div className={classes.root}>
         <div className={classes.header}>
-          <Avatar
-            alt={profileUser.name}
-            src={CONCAT_SERVER_URL(profileUser.avatarUri)}
-            className={classes.avatar}
-          />
+          <ProfileAvatar user={profileUser} />
           <div style={{ marginTop: 10 }}>
             <Typography variant="h2" gutterBottom className={classes.username}>
               {profileUser.name}
@@ -160,7 +164,11 @@ export default function Profile() {
         <PostGrid posts={posts} setPosts={setPosts} />
       </div>
       <CustomModal open={openModal} setOpen={setOpenModal}>
-        <UploadPost channel="normal" onUpload={onUpload} />
+        <UploadPost
+          classes={{ root: classes.cardRoot, card: classes.card }}
+          channel="normal"
+          onUpload={onUpload}
+        />
       </CustomModal>
     </>
   );

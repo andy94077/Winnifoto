@@ -16,10 +16,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomModal(props) {
-  const { open, setOpen, children, timeout = 500 } = props;
+  const { open, setOpen, children, timeout = 500, onClose = () => {} } = props;
   const classes = useStyles();
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setTimeout(onClose, timeout);
+    setOpen(false);
+  };
 
   return (
     <Modal

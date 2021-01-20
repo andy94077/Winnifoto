@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgress } from "@material-ui/core";
 import moment from "moment";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import Post from "../components/Post";
 import { SERVER } from "../config";
@@ -9,9 +9,10 @@ import ErrorMessage from "../components/ErrorMessage";
 
 export default function PostPage() {
   const { postID } = useParams();
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ error: false, msg: "" });
-  const [posts, setPosts] = useState([{}]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(async () => {
     if (postID === undefined || postID === null) return;
@@ -33,5 +34,14 @@ export default function PostPage() {
 
   if (isLoading) return <CircularProgress />;
   if (error.error) return <ErrorMessage msg={error.msg} />;
-  return <Post post={posts[0]} setPosts={setPosts} />;
+  return (
+    <Post
+      post={posts[0]}
+      setPosts={setPosts}
+      onDelete={() => {
+        setPosts([]);
+        history.push("/");
+      }}
+    />
+  );
 }

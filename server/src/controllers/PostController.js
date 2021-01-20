@@ -76,10 +76,11 @@ const PostController = {
     if (!data.postID) {
       return res.status(403).json({ msg: "postID field is required" });
     }
-    const filter = { _id: data.postID };
     try {
-      const msg = await Post.updateOne(filter, data);
-      return res.json({ msg });
+      const ret = await Post.findOneAndUpdate({ _id: data.postID }, data, {
+        new: true,
+      }).populate("user comments.user", ["name", "avatarUri"]);
+      return res.json(ret);
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
     }
@@ -98,6 +99,9 @@ const PostController = {
     const filter = { _id: data.postID };
     try {
       await Post.deleteOne(filter);
+      fs.rmdirSync(path.join("public", "postImg", data.postID), {
+        recursive: true,
+      });
       return res.json({ msg: "Success" });
     } catch (err) {
       return res.status(403).json({ msg: err.errors.name.message });
@@ -144,7 +148,7 @@ const PostController = {
     if (!data.postID) {
       return res.status(403).json({ msg: "postID field is required" });
     }
-    if (!data.comment) {
+    if (!data.comment || /^\s*$/.test(data.comment)) {
       return res.status(403).json({ msg: "comment field is required" });
     }
     try {

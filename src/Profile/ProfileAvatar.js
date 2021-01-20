@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     outline: "none",
     display: "inline",
+    "&:hover .avatar": { filter: "brightness(0.6)" },
+    "&:hover .edit-avatar": { display: "block" },
+  },
+  avatarMargin: {
     margin: "0 50px 30px 30px",
     [theme.breakpoints.down("sm")]: {
       margin: "0 35px 25px 20px",
@@ -20,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       margin: "0 25px 10px 15px",
     },
-    "&:hover .avatar": { filter: "brightness(0.6)" },
-    "&:hover .edit-avatar": { display: "block" },
   },
   avatar: {
     height: 150,
@@ -76,7 +78,7 @@ export default function ProfileAvatar(props) {
   if (user.name === profileUser.name) {
     return (
       <>
-        <div className={classes.root}>
+        <div className={`${classes.root} ${classes.avatarMargin}`}>
           <Avatar
             className={`${classes.avatar} avatar`}
             alt={user.name}
@@ -111,7 +113,7 @@ export default function ProfileAvatar(props) {
   }
   return (
     <Avatar
-      className={classes.avatar}
+      className={`${classes.avatar} ${classes.avatarMargin}`}
       alt={profileUser.name}
       src={CONCAT_SERVER_URL(profileUser.avatarUri)}
     />

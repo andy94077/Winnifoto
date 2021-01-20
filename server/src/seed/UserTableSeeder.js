@@ -22,14 +22,28 @@ const UserTableSeeder = {
         avatarUri: "/avatars/dog2.jpg",
       },
       {
+        name: "niny",
+        password: bcrypt.hashSync("niny", 10),
+        avatarUri: "/avatars/niny.jpg",
+      },
+      {
+        name: "iwonder",
+        password: bcrypt.hashSync("iwonder", 10),
+        avatarUri: "/avatars/iwonder.jpg",
+      },
+      {
+        name: "dylan",
+        password: bcrypt.hashSync("dylan", 10),
+      },
+      {
+        name: "outline.tw",
+        password: bcrypt.hashSync("outline.tw", 10),
+        avatarUri: "/avatars/outline.jpg",
+      },
+      {
         name: "yueh",
         password: bcrypt.hashSync("yueh", 10),
         avatarUri: "/avatars/y.jpg",
-      },
-      {
-        name: "test",
-        password: bcrypt.hashSync("test", 10),
-        token: "test",
       },
       {
         name: "admin",
@@ -37,7 +51,7 @@ const UserTableSeeder = {
         token: "admin",
       },
     ];
-    await User.create(users);
+    for (const user of users) await User.create(user);
   },
 };
 

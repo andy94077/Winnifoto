@@ -176,7 +176,7 @@ export default function Bar(props) {
   };
 
   const handleKeyUpSearch = (e) => {
-    if (e.key === "Enter" && !/^\s*$/.test(e.target.value))
+    if (e.key === "Enter" && !/^\s+$/.test(e.target.value))
       handleSearch(e.target.value);
   };
 

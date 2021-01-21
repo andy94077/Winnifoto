@@ -26,6 +26,10 @@ export default function App() {
   const [channel, setChannel] = useState("findModel");
   const classes = useStyles();
 
+  useEffect(() => {
+    document.title = "Winnifoto";
+  }, []);
+
   useEffect(async () => {
     const token = getCookie("token");
     try {

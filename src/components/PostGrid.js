@@ -61,6 +61,7 @@ export default function PostGrid(props) {
           setPosts={setPosts}
           classes={{ root: classes.cardRoot, card: classes.card }}
           onDelete={handleCloseModal}
+          onClose={handleCloseModal}
         />
       </CustomModal>
     </>

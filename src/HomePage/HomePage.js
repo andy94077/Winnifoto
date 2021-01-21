@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, CircularProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import UploadPost from "../Upload/PostUpload";
 import { SERVER } from "../config";
 import { selectUser } from "../redux/userSlice";
 import ErrorMessage from "../components/ErrorMessage";
+import Loading from "../components/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +65,7 @@ export default function HomePage(props) {
     }
   }, []);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <Loading />;
   const searchKeyDecoded = decodeURIComponent(searchKey);
   const filteredPosts = posts.filter(
     (post) =>

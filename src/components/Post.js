@@ -123,6 +123,7 @@ export default function Post(props) {
     post,
     setPosts,
     onDelete = () => {},
+    onClose = () => {},
     className = "",
     classes: classesProps = { root: "", card: "" },
   } = props;
@@ -229,6 +230,7 @@ export default function Post(props) {
                 ) : (
                   <Link
                     to={`/profile/${post.user._id}`}
+                    onClick={onClose}
                     className={classes.link}
                   >
                     <Avatar
@@ -245,6 +247,7 @@ export default function Post(props) {
                   <Link
                     className={classes.link}
                     to={`/profile/${post.user._id}`}
+                    onClick={onClose}
                     style={{ textDecoration: "none" }}
                   >
                     {post.user.name}
@@ -259,7 +262,11 @@ export default function Post(props) {
                     post.createdAt.fromNow()
                   )
                 ) : (
-                  <Link to={`/post/${post._id}`} className={classes.link}>
+                  <Link
+                    to={`/post/${post._id}`}
+                    className={classes.link}
+                    onClick={onClose}
+                  >
                     {post.createdAt - moment().subtract(5, "days")
                       ? post.createdAt.calendar()
                       : post.createdAt.fromNow()}
@@ -351,6 +358,7 @@ export default function Post(props) {
                         <Link
                           className={classes.link}
                           to={`/profile/${comment.user._id}`}
+                          onClick={onClose}
                         >
                           <Avatar
                             alt={comment.user.name}
@@ -363,6 +371,7 @@ export default function Post(props) {
                           <Link
                             className={classes.link}
                             to={`/profile/${comment.user._id}`}
+                            onClick={onClose}
                           >
                             {comment.user.name}
                           </Link>
@@ -409,7 +418,7 @@ export default function Post(props) {
                     style={{ transition: "color 0.25s" }}
                     color={
                       /^\s*$/.test(newComment) && !commentFocus
-                        ? "default"
+                        ? "inherit"
                         : "primary"
                     }
                   />

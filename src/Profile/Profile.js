@@ -106,6 +106,7 @@ export default function Profile() {
 
   useEffect(async () => {
     if (userID === undefined || userID === null) return;
+    setIsLoading(true);
     try {
       const { data } = await SERVER.get("/user", { params: { userID } });
       setPosts(

@@ -18,7 +18,8 @@ const UserController = {
             match: { type: "normal" },
             populate: { path: "comments.user", select: ["name", "avatarUri"] },
           });
-        if (user === null) res.status(404).json({ msg: "User Not Found." });
+        if (user === null)
+          return res.status(404).json({ msg: "User Not Found." });
         return res.json(user);
       } catch (err) {
         return res.status(403).json({ msg: "User Not Found." });

@@ -7,7 +7,7 @@
 ## Deployed
 http://140.112.30.33:3000/
 ## Demo 影片
-TODO
+https://youtu.be/TBB8TQ_Ye_k
 ## 使用/操作方式
 ### Server端
 #### backend

@@ -129,7 +129,7 @@ export default function Profile() {
     } finally {
       setIsLoading(false);
     }
-  }, [userID]);
+  }, [userID, user.avatarUri]);
 
   if (isLoading) return <Loading />;
   if (error.error)

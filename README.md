@@ -40,7 +40,7 @@ yarn build # 3. build frontend
 #### 已登入使用者可使用的額外功能
 1. 對貼文按讚、取消讚或留言。
 2. 在個人頁面新增、修改、刪除自己的作品集。
-3. 在`Find Model`或`Find Snaper`頁面中新增、修改、刪除尋找合作夥伴的貼文。
+3. 在`Find Model`或`Find Snapper`頁面中新增、修改、刪除尋找合作夥伴的貼文。
 4. 修改自己的大頭貼。
 
 ## Package

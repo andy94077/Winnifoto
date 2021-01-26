@@ -34,7 +34,7 @@ import CardImages from "./CardImages";
 import CONCAT_SERVER_URL from "../utils";
 import { SERVER } from "../config";
 import CustomModal from "./CustomModal";
-import UploadPost from "../Upload/PostUpload";
+import PostUpload from "../Upload/PostUpload";
 import AlertDialog from "./AlertDialog";
 import ErrorMessage from "./ErrorMessage";
 
@@ -429,7 +429,7 @@ export default function Post(props) {
         </Card>
       </div>
       <CustomModal open={openModal} setOpen={setOpenModal}>
-        <UploadPost
+        <PostUpload
           classes={{ root: classes.uploadRoot, card: classes.uploadCard }}
           channel="normal"
           onUpload={onUpload}

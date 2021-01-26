@@ -82,7 +82,7 @@ const PostController = {
       }).populate("user comments.user", ["name", "avatarUri"]);
       return res.json(ret);
     } catch (err) {
-      return res.status(403).json({ msg: err.errors.name.message });
+      return res.status(403).json({ msg: err });
     }
   },
   async delete(req, res) {
@@ -104,7 +104,7 @@ const PostController = {
       });
       return res.json({ msg: "Success" });
     } catch (err) {
-      return res.status(403).json({ msg: err.errors.name.message });
+      return res.status(403).json({ msg: err });
     }
   },
   async like(req, res) {
@@ -162,7 +162,7 @@ const PostController = {
       ).populate("user comments.user", ["name", "avatarUri"]);
       return res.json(updatedPost);
     } catch (err) {
-      return res.status(403).json({ msg: err.errors.name.message });
+      return res.status(403).json({ msg: err });
     }
   },
 };

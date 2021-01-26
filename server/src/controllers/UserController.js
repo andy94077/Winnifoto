@@ -56,7 +56,7 @@ const UserController = {
     } catch (err) {
       return res
         .status(403)
-        .json({ msg: { username: err.errors.name.message } });
+        .json({ msg: { username: err } });
     }
   },
   async authenticate(req, res) {

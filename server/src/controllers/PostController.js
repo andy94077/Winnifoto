@@ -75,6 +75,8 @@ const PostController = {
       return res.status(403).json({ msg: "postID field is required" });
     }
     try {
+      if (!Object.prototype.hasOwnProperty.call(data, "styles"))
+        data.styles = [];
       const ret = await Post.findOneAndUpdate({ _id: data.postID }, data, {
         new: true,
       }).populate("user comments.user", ["name", "avatarUri"]);

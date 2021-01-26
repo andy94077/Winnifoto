@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UploadPost(props) {
+export default function PostUpload(props) {
   const {
     channel,
     updatePost,

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start-frontend": "cd frontend && yarn start",
-    "heroku-prebuild": "cd backend && yarn",
+    "heroku-prebuild": "cd backend && yarn && yarn seed",
+    "build": "cd backend && yarn server",
     "build-frontend": "cd frontend && yarn build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

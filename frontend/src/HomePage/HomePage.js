@@ -61,7 +61,7 @@ export default function HomePage(props) {
       );
       setIsLoading(false);
     } catch (err) {
-      console.log(err.response);
+      // console.log(err.response);
     }
   }, []);
 

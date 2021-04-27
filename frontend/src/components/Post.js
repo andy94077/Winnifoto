@@ -172,7 +172,7 @@ export default function Post(props) {
       });
       updatePosts(data);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -186,7 +186,7 @@ export default function Post(props) {
       });
       updatePosts(data);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setNewComment("");
     }
@@ -205,7 +205,7 @@ export default function Post(props) {
       setPosts((pre) => pre.filter((prePost) => prePost._id !== post._id));
       onDelete();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

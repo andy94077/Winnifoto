@@ -202,7 +202,7 @@ export default function PostUpload(props) {
       setUploaded(false);
       onUpload(returnData);
     } catch (err) {
-      console.log(err.response);
+      // console.log(err.response);
     }
   };
 

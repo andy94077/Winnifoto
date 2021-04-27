@@ -25,7 +25,7 @@
     "routes": "run-script-os",
     "routes:win32": "set SHOW_ROUTES=true && nodemon src/server.js --exec babel-node --trace-warnings",
     "routes:default": "SHOW_ROUTES=true nodemon src/server.js --exec babel-node --trace-warnings",
-    "seed": "rm -rf public/postImg/* public/avatars/IMG_* && nodemon src/seed/seeder.js --exec babel-node",
+    "seed": "rm -rf public/postImg/* public/avatars/IMG_* && babel-node src/seed/seeder.js",
     "server": "nodemon src/server.js --exec babel-node --trace-warnings"
   },
   "devDependencies": {

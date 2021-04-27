@@ -77,7 +77,7 @@ export default function AvatarUpload(props) {
       const { data } = await SERVER.put("/user", formData);
       onUpload(data);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setIsLoading(false);
     }
